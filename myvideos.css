@@ -1,0 +1,135 @@
+/**
+ * myvideos block styles
+ *
+ * @version // $Id: myvideos.css,v 1.1 2010/07/04 21:51:32 arborrow Exp $
+ */
+ 
+/**
+ * General
+ */
+div.myvideos_box {
+    border-style: solid;
+    border-width: 1px;
+    border-color: #CCCCCC;
+    width: 60%;
+    margin: 40px auto 40px auto;
+    text-align: center;
+}
+ 
+/**
+ * My videos player
+ */
+ 
+div.myvideos_videoplayer {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-align: center;
+}
+
+div.myvideos_description {
+	border-style: solid;
+	border-width: 1px;
+    border-color: #CCCCCC;
+    width: 60%;
+    margin: 0 auto 40px auto;
+}
+
+h2.myvideos_title {
+    margin: 0 auto 20px auto;
+	text-align: center;
+	width: 40%;
+}
+
+/**
+ * My videos tab styles
+ */
+ 
+#myvideos {
+    height: 500px;
+	padding-top: 30px;
+	background-color: #EEEEEE;
+}
+
+#myvideos_scroll {
+	height: 450px;
+	width: 250px;
+	overflow: auto;
+	padding: 5px;
+	margin: 5px;
+	border-style: solid;
+	border-width: 1px;
+	border-color: #CCCCCC;
+	background-color: #dee7e7;
+}
+
+.myvideos_thumb {
+	width: 100px;
+	height: 65px;
+	padding-right: 5px;
+}
+
+.myvideos_video {
+	height: 100px;
+}
+
+.myvideos_video_info {
+	overflow: hidden;
+	font-size: 80%;
+}
+
+
+/**
+ * Comments
+ */
+#myvideos_id_comment_form {
+    text-align: center;
+}
+
+#myvideos_id_comments {
+}
+
+.myvideos_comment {
+	margin: 5px;
+}
+ 
+ 
+/**
+ * Add to favorites styles
+ */
+
+#myvideos_results {
+    margin: 50px 50px 0 100px;
+} 
+
+#myvideos_result {
+    clear: both;
+    padding-bottom: 5px;
+    padding-top: 5px;
+    padding-left: 5px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #CCCCCC;
+}
+
+div.myvideos_result_video {  
+    float: left;
+    margin-right: 80px;
+}
+
+div.myvideos_result_videodata {
+    height:180px;  // like video preview div
+}
+
+/**
+ * myvideos public view default styles
+ */
+
+#myvideos_public_searchbox {
+    float: left;
+}
+
+#myvideos_public_videobox {
+    
+}
