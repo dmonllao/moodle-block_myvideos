@@ -1,4 +1,4 @@
-<?php // $Id: tabs.php,v 1.1 2010/07/04 21:51:31 arborrow Exp $
+<?php // $Id: tabs.php,v 1.2 2010/07/06 08:11:13 davmon Exp $
 
 
 $tabsarray = array();
@@ -21,9 +21,9 @@ $tabsarray[] = 'searchvideos';
 $row = array();
 foreach ($tabsarray as $tabname) {
     
-    $url = $CFG->wwwroot.'/blocks/myvideos/index.php?action='.$tabname.'&courseid='.$courseid;
+    $url = $CFG->wwwroot.'/blocks/myvideos/index.php?action='.$tabname.'&amp;courseid='.$courseid;
     if (!empty($returnmod)) {
-        $url .= '&returnmod='.$returnmod;
+        $url .= '&amp;returnmod='.$returnmod;
     }
     
     $row[] = new tabobject($tabname, $url, get_string('title'.$tabname, 'block_myvideos'));

@@ -1,4 +1,4 @@
-<?php // $Id: myvideos_linkvideo_class.php,v 1.1 2010/07/04 21:51:24 arborrow Exp $
+<?php // $Id: myvideos_linkvideo_class.php,v 1.2 2010/07/06 08:11:13 davmon Exp $
 
 /**
  * Class to view add a linked video
@@ -64,7 +64,7 @@ class myvideos_linkvideo_class extends myvideos_actionable {
                 echo '<script>myvideos_return_to_mod('.$video->id.', "'.$video->title.'", "'.get_string("uploadedvideo", "block_myvideos").'");</script>';
             }
             
-            $redirecturl = $CFG->wwwroot.'/blocks/myvideos/index.php?action=viewvideo&courseid='.$this->_courseid.'&id='.$video->id;
+            $redirecturl = $CFG->wwwroot.'/blocks/myvideos/index.php?action=viewvideo&amp;courseid='.$this->_courseid.'&amp;id='.$video->id;
             redirect($redirecturl, get_string("changessaved"));
         }
     }
