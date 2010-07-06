@@ -1,4 +1,4 @@
-<?php // $Id: myvideos_searchvideos_class.php,v 1.1 2010/07/04 21:51:23 arborrow Exp $
+<?php // $Id: myvideos_searchvideos_class.php,v 1.2 2010/07/06 08:11:13 davmon Exp $
 
 /**
  * Class to search other users videos
@@ -139,7 +139,7 @@ class myvideos_searchvideos_class extends myvideos_actionable {
                     
                     // Link to play video at normal size
                     if ($publiclevel == 2) {
-                        echo '<div><a href="'.$CFG->wwwroot.'/blocks/myvideos/view.php?action=view&videoid='.$result->id.'">';
+                        echo '<div><a href="'.$CFG->wwwroot.'/blocks/myvideos/view.php?action=view&amp;videoid='.$result->id.'">';
                         echo get_string("titleviewvideo", "block_myvideos").'</a></div>';
                     }
                     

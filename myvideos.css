@@ -1,7 +1,7 @@
 /**
  * myvideos block styles
  *
- * @version // $Id: myvideos.css,v 1.1 2010/07/04 21:51:32 arborrow Exp $
+ * @version // $Id: myvideos.css,v 1.2 2010/07/06 08:11:13 davmon Exp $
  */
  
 /**
@@ -32,6 +32,7 @@ div.myvideos_description {
     border-color: #CCCCCC;
     width: 60%;
     margin: 0 auto 40px auto;
+    padding: 2px;
 }
 
 h2.myvideos_title {
@@ -50,7 +51,7 @@ h2.myvideos_title {
 	background-color: #EEEEEE;
 }
 
-#myvideos_scroll {
+.myvideos_scroll {
 	height: 450px;
 	width: 250px;
 	overflow: auto;
