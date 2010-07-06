@@ -1,4 +1,4 @@
-<?php // $Id: getfile.php,v 1.1 2010/07/04 21:51:31 arborrow Exp $
+<?php // $Id: getfile.php,v 1.2 2010/07/06 07:54:42 davmon Exp $
  
 /**
  * Gets a file from the videos repository
@@ -23,8 +23,13 @@ if (!$video || $video->link == 1) {
 }
 
 
-// Private video
+// Private video 
 if ($video->publiclevel == 0 && $video->userid != $USER->id) {
+    
+    // The petition should come from the module
+    if (!$cmid) {
+        die();
+    }
     
     // If it's not the propietary of a private video check the cmid access
     if (!has_capability('mod/myvideos:view', get_context_instance(CONTEXT_MODULE, $cmid))) {
