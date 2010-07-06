@@ -1,4 +1,4 @@
-<?php // $Id: block_myvideos.php,v 1.1 2010/07/04 21:51:34 arborrow Exp $
+<?php // $Id: block_myvideos.php,v 1.2 2010/07/06 07:33:36 davmon Exp $
 
 $string['accessdenied'] = 'Accés denegat';
 $string['addtofavorites'] = 'afegir a favorits';
@@ -8,6 +8,7 @@ $string['cantbeadded'] = 'No es pot afegir';
 $string['cantbemodified'] = 'No es pot modificar';
 $string['commentadded'] = 'Comentari afegit';
 $string['comments'] = 'Comentaris';
+$string['download'] = 'Descarrega';
 $string['errorcant'] = 'No, no podem';
 $string['errorcantdelete'] = 'No es pot eliminar';
 $string['errorcantsave'] = 'No es pot guardar';
@@ -33,13 +34,11 @@ $string['loading'] = 'Carregant';
 $string['myvideos:favoritevideo'] = 'Afegir a favorits';
 $string['myvideos:linkvideo'] = 'Enllaçar un video extern';
 $string['myvideos:manage'] = 'Utilitzar el bloc';
-$string['myvideos:overrideffmpeg'] = 'Saltar-se l\'ffmpeg als videos en format Flash Video';
 $string['myvideos:publicvideo'] = 'Fer accessibles els videos des de fora de Moodle';
 $string['myvideos:selectquality'] = 'Selecciona la qualitat del video codificat';
 $string['myvideos:uploadvideo'] = 'Pujar un video';
 $string['noblockconfig'] = 'No s\'ha configurat el bloc';
 $string['noresults'] = 'No hi ha resultats';
-$string['overrideffmpeg'] = 'Saltar-se l\'ffmpeg als videos en format Flash Video';
 $string['publiclevel'] = 'Privacitat';
 $string['quality'] = 'Qualitat';
 $string['qualityhigh'] = 'Alta';

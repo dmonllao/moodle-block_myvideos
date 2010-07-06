@@ -1,4 +1,4 @@
-<?php // $Id: ffmpeg_class.php,v 1.1 2010/07/04 21:51:23 arborrow Exp $
+<?php // $Id: ffmpeg_class.php,v 1.2 2010/07/06 07:33:36 davmon Exp $
 
 
 /**
@@ -25,6 +25,10 @@ class ffmpeg_class {
     var $_tmpfile;
     var $_convertedfile;
     var $_thumb;
+    
+    // URL params
+    var $_overrideffmpeg;
+    var $_qualitysubmitted;
     
     
     /**
@@ -65,12 +69,14 @@ class ffmpeg_class {
         // Accepted filetypes (all in lower case)
         $this->_filetypes = array('avi', 'asf', 
                                  'mpeg', 'realmedia', 
-                                 'Flash Video', 'QuickTime');
+                                 'flash video', 'QuickTime');
         
         // Quality options
         $this->_quality = array('1' => '150k', '2' => '500k', '3' => '1000k');
-        
         $this->_defaultpermissions = 0770;
+        
+        $this->_qualitysubmitted = optional_param('quality', '2', PARAM_INT);
+        $this->_overrideffmpeg = false;
     }
     
     
@@ -101,6 +107,11 @@ class ffmpeg_class {
             
             if (strstr(strtolower($videofiletype), strtolower($filetype)) != false) {
                 $accepted = 1;
+                
+                // We skip the flash video videos encoding
+                if (strstr(strtolower($videofiletype), 'flash video') != false) {
+                    $this->_overrideffmpeg = 1;
+                }
             }
         }
         
@@ -108,7 +119,7 @@ class ffmpeg_class {
         if (empty($accepted)) {
             
             $this->delete_files();
-            redirect($CFG->wwwroot.'/blocks/myvideos/index.php?courseid='.$COURSE->id.'&action=uploadvideo', get_string('errorffmpegfiletype', 'block_myvideos'), 5);
+            redirect($CFG->wwwroot.'/blocks/myvideos/index.php?courseid='.$COURSE->id.'&amp;action=uploadvideo', get_string('errorffmpegfiletype', 'block_myvideos'), 5);
         }
         
     }
@@ -127,13 +138,11 @@ class ffmpeg_class {
         }
         
         // Quality
-        $qualitysubmitted = optional_param('quality', '2', PARAM_INT);
-        $bitratestring = ' -b '.$this->_quality[$qualitysubmitted];
+        $bitratestring = ' -b '.$this->_quality[$this->_qualitysubmitted];
         $this->_convertedfile = $this->_tmpfile.'.flv';
     
         // If override ffmpeg flash video conversion was enabled we skip the conversion
-        if (optional_param('overrideffmpeg', false, PARAM_INT) && 
-            has_capability('block/myvideos:overrideffmpeg', get_context_instance(CONTEXT_COURSE, $COURSE->id))) {
+        if ($this->_overrideffmpeg) {
             
                 $filetypecommand = 'file '.$this->_tmpfile;
                 $videofiletype = $this->execute_command($filetypecommand);
@@ -166,7 +175,7 @@ class ffmpeg_class {
                 
                 // If we can't convert the file, redirection to index
                 $this->delete_files();
-                redirect($CFG->wwwroot.'/blocks/myvideos/index.php?courseid='.$COURSE->id.'&action=uploadvideo', get_string('fileconversionerror', 'block_myvideos'), 5);
+                redirect($CFG->wwwroot.'/blocks/myvideos/index.php?courseid='.$COURSE->id.'&amp;action=uploadvideo', get_string('fileconversionerror', 'block_myvideos'), 5);
             }
             
             // To ffmpeg again
@@ -176,7 +185,7 @@ class ffmpeg_class {
                 
                 // If we can't convert the file redirection to index
                 $this->delete_files();
-                redirect($CFG->wwwroot.'/blocks/myvideos/index.php?courseid='.$COURSE->id.'&action=uploadvideo', get_string('fileconversionerror', 'block_myvideos'), 5);
+                redirect($CFG->wwwroot.'/blocks/myvideos/index.php?courseid='.$COURSE->id.'&amp;action=uploadvideo', get_string('fileconversionerror', 'block_myvideos'), 5);
             }
         }
         
@@ -197,7 +206,7 @@ class ffmpeg_class {
         if (!strstr($feedback, 'Press [q] to stop encoding')) {
             
             $this->delete_files();
-            redirect($CFG->wwwroot.'/blocks/myvideos/index.php?courseid='.$COURSE->id.'&action=uploadvideo', get_string('thumberror', 'block_myvideos'), 5);
+            redirect($CFG->wwwroot.'/blocks/myvideos/index.php?courseid='.$COURSE->id.'&amp;action=uploadvideo', get_string('thumberror', 'block_myvideos'), 5);
         }
         
         $this->_thumb = $this->_tmpfile.'.1.jpg';

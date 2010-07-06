@@ -1,4 +1,4 @@
-<?php // $Id: myvideos_uploadvideo_form.php,v 1.1 2010/07/04 21:51:29 arborrow Exp $
+<?php // $Id: myvideos_uploadvideo_form.php,v 1.2 2010/07/06 07:33:36 davmon Exp $
 
 require_once($CFG->dirroot.'/blocks/myvideos/forms/myvideos_form.php');
 
@@ -33,13 +33,6 @@ class myvideos_uploadvideo_form extends myvideos_form {
             $mform->setHelpButton('quality', array('quality', get_string('quality', 'block_myvideos'), 'block_myvideos'));
         } else {
             $mform->addElement('hidden', 'quality', '2');
-        }
-
-        // Override flash video
-        if (has_capability('block/myvideos:overrideffmpeg', $context)) {
-            $mform->addElement('selectyesno', 'overrideffmpeg', get_string('overrideffmpeg', 'block_myvideos'));
-        } else {
-            $mform->addElement('hidden', 'overrideffmpeg', 0);
         }
         
         // Terms of use

@@ -1,4 +1,4 @@
-<?php // $Id: block_myvideos.php,v 1.1 2010/07/04 21:51:34 arborrow Exp $
+<?php // $Id: block_myvideos.php,v 1.2 2010/07/06 07:33:36 davmon Exp $
 
 $string['accessdenied'] = 'Access denied';
 $string['addtofavorites'] = 'add to favorites';
@@ -8,6 +8,7 @@ $string['cantbeadded'] = 'Can\'t be added';
 $string['cantbemodified'] = 'Can\'t be modified';
 $string['commentadded'] = 'Comment added';
 $string['comments'] = 'Comments';
+$string['download'] = 'Download';
 $string['errorcant'] = 'No, we can\'t';
 $string['errorcantdelete'] = 'It can\'t be deleted';
 $string['errorcantsave'] = 'That content can\'t be saved';
@@ -33,13 +34,11 @@ $string['loading'] = 'Loading';
 $string['myvideos:favoritevideo'] = 'Add to favorites';
 $string['myvideos:linkvideo'] = 'Link a external video';
 $string['myvideos:manage'] = 'Use the block';
-$string['myvideos:overrideffmpeg'] = 'Override ffmpeg uploading a Flash Video file';
 $string['myvideos:publicvideo'] = 'Make a video accessible from outside Moodle';
 $string['myvideos:selectquality'] = 'Choose the quality of the encoded video';
 $string['myvideos:uploadvideo'] = 'Upload a video';
 $string['noblockconfig'] = 'There is no block configuration';
 $string['noresults'] = 'No results';
-$string['overrideffmpeg'] = 'Override ffmpeg conversion on Flash Videos';
 $string['publiclevel'] = 'Privacity';
 $string['quality'] = 'Quality';
 $string['qualityhigh'] = 'High';
