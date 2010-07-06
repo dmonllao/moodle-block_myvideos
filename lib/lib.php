@@ -1,4 +1,4 @@
-<?php // $Id: lib.php,v 1.1 2010/07/04 21:51:24 arborrow Exp $
+<?php // $Id: lib.php,v 1.2 2010/07/06 07:54:42 davmon Exp $
 
 
 /**
@@ -106,26 +106,26 @@ function myvideos_show_video($videodata, $preview=false, $limitedsize=false, $cm
         
         // Add the course_module to check the private video access
         if ($cmid) {
-            $fileurl .= '&cmid='.$cmid;
+            $fileurl .= '&amp;cmid='.$cmid;
         }
         
         // ext param added to avoid the flv player detection of the video extension
-        $fileurl .= '&ext=flv';
+        $fileurl .= '&amp;ext=flv';
         $fileurl = urlencode($fileurl);
         
         echo '<object id="id_flvplayer" style="width:'.$video->width.'px;height:'.$video->height.'px;">';
         echo '<param name="flashvars" value="file='.$fileurl.'" />';
-        echo '<param name="src" value="'.$swfpath.'">';
-        echo '<param name="movie" value="'.$swfpath.'">';
+        echo '<param name="src" value="'.$swfpath.'" />';
+        echo '<param name="movie" value="'.$swfpath.'" />';
         echo '<param name="quality" value="high" />';
         echo '<param name="allowfullscreen" value="true" />';
         
-        $flashvars = 'file='.$fileurl.'&quality=high';
+        $flashvars = 'file='.$fileurl.'&amp;quality=high';
         
         if (!$preview) {
             //echo '<param name="autoplay" value="true" />';
             //echo '<param name="autostart" value="true" />';
-            //$flashvars .= '&autoplay=true&autostart=true';
+            //$flashvars .= '&amp;autoplay=true&amp;autostart=true';
         }
         
         echo '<embed src="'.$swfpath.'" 
@@ -153,16 +153,20 @@ function myvideos_show_video_actions($videodata, $courseid) {
     
     echo '<div>';
     
-    echo ' <a href="'.$CFG->wwwroot.'/blocks/myvideos/index.php?courseid='.$courseid.'&action=viewvideo&id='.$videodata->id.'">'.get_string("view").'</a>';
+    echo ' <a href="'.$CFG->wwwroot.'/blocks/myvideos/index.php?courseid='.$courseid.'&amp;action=viewvideo&amp;id='.$videodata->id.'">'.get_string("view").'</a>';
     
     if ($videodata->favorite) {
 
-        echo ' <a href="'.$CFG->wwwroot.'/blocks/myvideos/index.php?courseid='.$courseid.'&action=deletefavoritevideo&id='.$videodata->id.'">'.get_string("delete").'</a>';
+        echo ' <a href="'.$CFG->wwwroot.'/blocks/myvideos/index.php?courseid='.$courseid.'&amp;action=deletefavoritevideo&amp;id='.$videodata->id.'">'.get_string("delete").'</a>';
 
     } else {
-        echo ' <a href="'.$CFG->wwwroot.'/blocks/myvideos/index.php?courseid='.$courseid.'&action=editvideo&id='.$videodata->id.'">'.get_string("edit").'</a>';
-        echo ' <a href="'.$CFG->wwwroot.'/blocks/myvideos/index.php?courseid='.$courseid.'&action=deletevideo&id='.$videodata->id.'">'.get_string("delete").'</a>';
-
+        echo ' <a href="'.$CFG->wwwroot.'/blocks/myvideos/index.php?courseid='.$courseid.'&amp;action=editvideo&amp;id='.$videodata->id.'">'.get_string("edit").'</a>';
+        echo ' <a href="'.$CFG->wwwroot.'/blocks/myvideos/index.php?courseid='.$courseid.'&amp;action=deletevideo&amp;id='.$videodata->id.'">'.get_string("delete").'</a>';
+    }
+    
+    // Only the uploader can download the encoded video
+    if ($USER->id == $videodata->userid) {
+        echo ' <a href="'.$CFG->wwwroot.'/blocks/myvideos/getfile.php?videoid='.$videodata->id.'">'.get_string("download", "block_myvideos").'</a>';
     }
     
     echo '</div>';
