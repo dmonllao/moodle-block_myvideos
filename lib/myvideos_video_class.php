@@ -1,4 +1,4 @@
-<?php // $Id: myvideos_video_class.php,v 1.1 2010/07/04 21:51:23 arborrow Exp $
+<?php // $Id: myvideos_video_class.php,v 1.2 2010/07/06 08:11:14 davmon Exp $
 
 /**
  * Class to view an user video (uploaded, linked or "favorited")
@@ -161,7 +161,7 @@ class myvideos_video_class extends myvideos_actionable {
                 
             default:
                 
-                $linkyes = $CFG->wwwroot.'/blocks/myvideos/index.php?courseid='.$this->_courseid.'&action='.$this->_action.'&id='.$this->_id.'&confirm=1';
+                $linkyes = $CFG->wwwroot.'/blocks/myvideos/index.php?courseid='.$this->_courseid.'&amp;action='.$this->_action.'&amp;id='.$this->_id.'&amp;confirm=1';
                 $linkno = $CFG->wwwroot.'/blocks/myvideos/index.php?courseid='.$this->_courseid;
                 notice_yesno(get_string('areyousure', 'block_myvideos'), $linkyes, $linkno);
                 break;

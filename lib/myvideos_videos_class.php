@@ -1,4 +1,4 @@
-<?php // $Id: myvideos_videos_class.php,v 1.1 2010/07/04 21:51:23 arborrow Exp $
+<?php // $Id: myvideos_videos_class.php,v 1.2 2010/07/06 08:11:14 davmon Exp $
 
 /**
  * Class to list the user videos
@@ -74,8 +74,8 @@ class myvideos_videos_class extends myvideos_actionable {
             echo '<div id="myvideos">';
             
             // We must hae a reference to the first listed video
-            $defaultuploadedvideo = $this->_print_column($this->_uservideos, get_string("uservideoslabel", "block_myvideos"), 'float:left;');
-            $defaultlinkedvideo = $this->_print_column($this->_userfavorites, get_string("favoritevideoslabel", "block_myvideos"), 'float:right;');
+            $defaultuploadedvideo = $this->_print_column($this->_uservideos, "uservideoslabel", 'float:left;');
+            $defaultlinkedvideo = $this->_print_column($this->_userfavorites, "favoritevideoslabel", 'float:right;');
             
             if ($defaultuploadedvideo) {
                 $defaultvideo = $defaultuploadedvideo;
@@ -106,19 +106,19 @@ class myvideos_videos_class extends myvideos_actionable {
      * Prints a videos column
      * 
      * @param     array       $videos      Videos to list
-     * @param     string      $title       TileList title
+     * @param     string      $titlekey    TileList title
      * @param     string      $divstyle    float size
      * @return    integer                  Returns the key of the first video listed to display it by default
      */
-    public function _print_column($videos, $title, $divstyle='') {
+    public function _print_column($videos, $titlekey, $divstyle='') {
 
         global $CFG;
         
         
         if ($videos) {
             
-            echo '<div id="myvideos_scroll" style="'.$divstyle.'">';
-            echo '<h3>'.$title.'</h3>';
+            echo '<div class="myvideos_scroll" id="'.$titlekey.'" style="'.$divstyle.'">';
+            echo '<h3>'.get_string($titlekey, "block_myvideos").'</h3>';
             
             foreach ($videos as $key => $video) {
 
@@ -131,7 +131,7 @@ class myvideos_videos_class extends myvideos_actionable {
                 echo '<div class="myvideos_video">';
                 
                 if ($video->link == 0) {
-                    $imgsrc = $CFG->wwwroot.'/blocks/myvideos/getfile.php?videoid='.$video->id.'&thumb=1';
+                    $imgsrc = $CFG->wwwroot.'/blocks/myvideos/getfile.php?videoid='.$video->id.'&amp;thumb=1';
                 } else {
                     $imgsrc = $CFG->wwwroot.'/blocks/myvideos/pix/linkthumb.gif';
                 }
