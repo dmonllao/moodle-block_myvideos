@@ -1,4 +1,4 @@
-<?php // $Id: access.php,v 1.1 2010/07/04 21:51:33 arborrow Exp $
+<?php // $Id: access.php,v 1.2 2010/07/06 07:33:36 davmon Exp $
 
 
 $block_myvideos_capabilities = array(
@@ -51,15 +51,6 @@ $block_myvideos_capabilities = array(
     ),
 
     'block/myvideos:publicvideo' => array(
-
-        'captype' => 'write',
-        'contextlevel' => CONTEXT_COURSE,
-        'legacy' => array(
-            'admin' => CAP_ALLOW
-        )
-    ),
-    
-    'block/myvideos:overrideffmpeg' => array(
 
         'captype' => 'write',
         'contextlevel' => CONTEXT_COURSE,
