@@ -1,4 +1,4 @@
-<?php // $Id: rest.php,v 1.1 2010/07/04 21:51:32 arborrow Exp $
+<?php // $Id: rest.php,v 1.2 2010/09/09 09:56:14 davmon Exp $
 
 require_once('../../config.php');
 require_once('lib/lib.php');
@@ -6,6 +6,7 @@ require_once('lib/lib.php');
 $courseid = optional_param('courseid', 1, PARAM_INT);
 $videoid = optional_param('videoid', false, PARAM_INT);
 $action = optional_param('action', false, PARAM_ALPHA);
+$keywords = optional_param('keywords', false, PARAM_TEXT);
 
 require_login($courseid);
 
@@ -99,6 +100,66 @@ switch ($action) {
         }
         
         myvideos_show_comment(stripslashes_recursive($commentdata));
+        
+        break;
+        
+    case 'filtervideos':
+        
+        // Using myvideos_searchvideo class to reuse parsing code
+        require_once($CFG->dirroot.'/blocks/myvideos/lib/myvideos_searchvideos_class.php');
+        $searchvideo = new myvideos_searchvideos_class();
+        
+        // It returns an associative array with the results DOM ids
+        $uservideossql = "SELECT mv.id, 'uservideoslabel' as videotype 
+                          FROM {$CFG->prefix}myvideos_video mv ";
+        
+        $favoritevideossql = "SELECT mv.id, 'favoritevideoslabel' as videotype 
+                              FROM {$CFG->prefix}myvideos_video mv 
+                              JOIN {$CFG->prefix}myvideos_video_favorite mvf ON mvf.videoid = mv.id ";
+        
+        
+        // Common query
+        $commonsql = "LEFT JOIN {$CFG->prefix}myvideos_video_tag mvt ON mvt.videoid = mv.id 
+                      LEFT JOIN {$CFG->prefix}myvideos_video_keyword mvk ON mvk.id = mvt.keywordid
+                      WHERE (";
+        
+        // Video title search
+        $commonsql .= $searchvideo->_where($keywords, 'title');
+        
+        // Video tags search
+        if ($explodedkeywords = $searchvideo->_get_submitted_keywords($keywords)) {
+            foreach ($explodedkeywords as $keyword) {
+                
+                //$keyword = clean_text($keyword, PARAM_TEXT);        // Already cleaned 
+                $commonsql .= " OR mvk.keyword = '$keyword'";
+            }
+        }
+        $commonsql .= ")";
+        
+        
+        $uservideossql = $uservideossql.$commonsql." AND mv.userid = '$USER->id' AND mv.timedeleted = '0'";
+        $favoritevideossql = $favoritevideossql.$commonsql." AND mvf.userid = '$USER->id' AND mv.timedeleted = '0'";
+
+        $results['user'] = get_records_sql($uservideossql);
+        $results['favorite'] = get_records_sql($favoritevideossql);
+        
+        // Array to JSONize
+        $jsonarray = array();
+        
+        $arraykeys = array('user', 'favorite');
+        foreach ($arraykeys as $arraykey) {
+            if (!empty($results[$arraykey])) {
+                
+                foreach ($results[$arraykey] as $result) {
+                    $key = $result->videotype.'_'.$result->id;
+                    $jsonarray[$key] = $key;
+                }
+            }
+        }
+        
+        if (!empty($jsonarray)) {
+            echo json_encode($jsonarray);
+        }
         
         break;
         

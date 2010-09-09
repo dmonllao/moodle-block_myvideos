@@ -1,4 +1,4 @@
-<?php // $Id: block_myvideos.php,v 1.2 2010/07/06 07:33:36 davmon Exp $
+<?php // $Id: block_myvideos.php,v 1.3 2010/09/09 09:56:14 davmon Exp $
 
 $string['accessdenied'] = 'Accés denegat';
 $string['addtofavorites'] = 'afegir a favorits';
@@ -29,6 +29,7 @@ $string['errorwrongvideoid'] = 'L\'id del video no és correcte';
 $string['favoritevideoslabel'] = 'Videos favorits';
 $string['fileconversionerror'] = 'Error de conversió';
 $string['filetoupload'] = 'Arxiu a pujar';
+$string['filter'] = 'Filtrar vídeos';
 $string['keywords'] = 'Paraules clau';
 $string['loading'] = 'Carregant';
 $string['myvideos:favoritevideo'] = 'Afegir a favorits';
