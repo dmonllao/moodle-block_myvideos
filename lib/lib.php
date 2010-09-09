@@ -1,4 +1,4 @@
-<?php // $Id: lib.php,v 1.2 2010/07/06 07:54:42 davmon Exp $
+<?php // $Id: lib.php,v 1.3 2010/09/09 09:56:14 davmon Exp $
 
 
 /**
@@ -151,12 +151,12 @@ function myvideos_show_video_actions($videodata, $courseid) {
     
     global $CFG, $USER;
     
+    // Actions
     echo '<div>';
     
     echo ' <a href="'.$CFG->wwwroot.'/blocks/myvideos/index.php?courseid='.$courseid.'&amp;action=viewvideo&amp;id='.$videodata->id.'">'.get_string("view").'</a>';
     
     if ($videodata->favorite) {
-
         echo ' <a href="'.$CFG->wwwroot.'/blocks/myvideos/index.php?courseid='.$courseid.'&amp;action=deletefavoritevideo&amp;id='.$videodata->id.'">'.get_string("delete").'</a>';
 
     } else {
@@ -168,7 +168,15 @@ function myvideos_show_video_actions($videodata, $courseid) {
     if ($USER->id == $videodata->userid) {
         echo ' <a href="'.$CFG->wwwroot.'/blocks/myvideos/getfile.php?videoid='.$videodata->id.'">'.get_string("download", "block_myvideos").'</a>';
     }
+    echo '</div>';
     
+    
+    // Filters
+    require_once($CFG->dirroot.'/blocks/myvideos/forms/myvideos_filtervideos_form.php');
+    $searchform = new myvideos_filtervideos_form();
+    
+    echo '<div>';
+    $searchform->display();
     echo '</div>';
 }
 

@@ -1,4 +1,4 @@
-<?php // $Id: ffmpeg_class.php,v 1.2 2010/07/06 07:33:36 davmon Exp $
+<?php // $Id: ffmpeg_class.php,v 1.3 2010/09/09 09:56:14 davmon Exp $
 
 
 /**
@@ -58,11 +58,11 @@ class ffmpeg_class {
             print_error('errornossh', 'block_myvideos');
         }
         
-        $this->_cnx = ssh2_connect($this->_config->server, 22);
+        $this->_cnx = @ssh2_connect($this->_config->server, 22);
         if (!$this->_cnx) {
             print_error('errorffmpegconnecting', 'block_myvideos');
         }
-        if (!ssh2_auth_password($this->_cnx, $this->_config->username, $this->_config->password)) {
+        if (!@ssh2_auth_password($this->_cnx, $this->_config->username, $this->_config->password)) {
             print_error('errorffmpeglogin', 'block_myvideos');
         }
         
@@ -94,7 +94,7 @@ class ffmpeg_class {
         $this->_tmpfile = $this->_config->path.'/'.$USER->id.'_'.rand(10, 99);
         
         // Send video to encode
-        if (!ssh2_scp_send($this->_cnx, $_FILES['uploadfile']['tmp_name'], $this->_tmpfile, $this->_defaultpermissions)) {
+        if (!@ssh2_scp_send($this->_cnx, $_FILES['uploadfile']['tmp_name'], $this->_tmpfile, $this->_defaultpermissions)) {
             print_error('errorffmpegsending', 'block_myvideos');
         }
 
@@ -245,12 +245,17 @@ class ffmpeg_class {
         if (strstr($feedback, $this->_convertedfile) != false) {
             $info = explode($this->_convertedfile, $feedback);
             
-            // $streams[1] => Video, $streams[2] => Audio
-            // TODO: Check streams strings
             $streams = explode('Stream #', $info[1]);
             
+            // Looking for a video stream
+            for ($i = 1; $i < 5; $i++) {
+                if (!empty($streams[$i]) && empty($videostream) && strstr($streams[$i], 'Video:') != false) {
+                    $videostream = $streams[$i];
+                }
+            }
+            
             // Video data
-            $videodata = explode(',', $streams[1]);
+            $videodata = explode(',', $videostream);
             
             // Video size
             $size = explode('x', $videodata[2]);
@@ -279,7 +284,7 @@ class ffmpeg_class {
             if (!file_exists($mainpath)) {
                             
                 // Creating main path
-                if (!mkdir($mainpath, $this->_defaultpermissions, true)) {
+                if (!@mkdir($mainpath, $this->_defaultpermissions, true)) {
                     print_error('errorcheckpermissions', 'block_myvideos');
                 }
             }
@@ -291,11 +296,14 @@ class ffmpeg_class {
                 print_error('errorcheckpermissions', 'block_myvideos');
             }
             
-            mkdir(rtrim($this->_config->moodlepath, '/').'/'.$USER->id.'/videos/', $this->_defaultpermissions, true);
-            mkdir(rtrim($this->_config->moodlepath, '/').'/'.$USER->id.'/thumbs/', $this->_defaultpermissions, true);
+            if (!@mkdir(rtrim($this->_config->moodlepath, '/').'/'.$USER->id.'/videos/', $this->_defaultpermissions, true) || 
+                !@mkdir(rtrim($this->_config->moodlepath, '/').'/'.$USER->id.'/thumbs/', $this->_defaultpermissions, true)) {
+                    
+                    print_error('errorcheckpermissions', 'block_myvideos');
+            }
         }
-        if (!ssh2_scp_recv($this->_cnx, $this->_convertedfile, $videopath) ||
-            !ssh2_scp_recv($this->_cnx, $this->_thumb, $thumbpath)) {
+        if (!@ssh2_scp_recv($this->_cnx, $this->_convertedfile, $videopath) ||
+            !@ssh2_scp_recv($this->_cnx, $this->_thumb, $thumbpath)) {
                 
             $this->delete_files();
             print_error('errorffmpegrecieving', 'block_myvideos');
@@ -310,7 +318,7 @@ class ffmpeg_class {
     
     function execute_command($command) {
         
-        $stream = ssh2_exec($this->_cnx, $command, false);
+        $stream = @ssh2_exec($this->_cnx, $command, false);
         stream_set_blocking($stream, true);
         
         $data = '';
