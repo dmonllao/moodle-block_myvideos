@@ -1,4 +1,4 @@
-<?php // $Id: myvideos_videos_class.php,v 1.2 2010/07/06 08:11:14 davmon Exp $
+<?php // $Id: myvideos_videos_class.php,v 1.3 2010/09/09 09:56:14 davmon Exp $
 
 /**
  * Class to list the user videos
@@ -128,7 +128,7 @@ class myvideos_videos_class extends myvideos_actionable {
                     $defaultvideokey = $key;
                 }
                 
-                echo '<div class="myvideos_video">';
+                echo '<div class="myvideos_video" id="'.$titlekey.'_'.$video->id.'">';
                 
                 if ($video->link == 0) {
                     $imgsrc = $CFG->wwwroot.'/blocks/myvideos/getfile.php?videoid='.$video->id.'&amp;thumb=1';
