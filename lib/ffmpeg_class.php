@@ -1,4 +1,4 @@
-<?php // $Id: ffmpeg_class.php,v 1.3 2010/09/09 09:56:14 davmon Exp $
+<?php // $Id: ffmpeg_class.php,v 1.4 2010/11/04 11:14:41 davmon Exp $
 
 
 /**
@@ -53,17 +53,21 @@ class ffmpeg_class {
         $this->_config->moodlepath = rtrim($this->_config->moodlepath, '/');
         
         
-        // Connection and authentication to server
-        if (!function_exists('ssh2_connect')) {
-            print_error('errornossh', 'block_myvideos');
-        }
-        
-        $this->_cnx = @ssh2_connect($this->_config->server, 22);
-        if (!$this->_cnx) {
-            print_error('errorffmpegconnecting', 'block_myvideos');
-        }
-        if (!@ssh2_auth_password($this->_cnx, $this->_config->username, $this->_config->password)) {
-            print_error('errorffmpeglogin', 'block_myvideos');
+        // Search for ssh2
+        if ($this->_config->server != 'localhost') {
+            
+            // Connection and authentication to server
+            if (!function_exists('ssh2_connect')) {
+                print_error('errornossh', 'block_myvideos');
+            }
+            
+            $this->_cnx = @ssh2_connect($this->_config->server, 22);
+            if (!$this->_cnx) {
+                print_error('errorffmpegconnecting', 'block_myvideos');
+            }
+            if (!@ssh2_auth_password($this->_cnx, $this->_config->username, $this->_config->password)) {
+                print_error('errorffmpeglogin', 'block_myvideos');
+            }
         }
         
         // Accepted filetypes (all in lower case)
@@ -94,8 +98,17 @@ class ffmpeg_class {
         $this->_tmpfile = $this->_config->path.'/'.$USER->id.'_'.rand(10, 99);
         
         // Send video to encode
-        if (!@ssh2_scp_send($this->_cnx, $_FILES['uploadfile']['tmp_name'], $this->_tmpfile, $this->_defaultpermissions)) {
-            print_error('errorffmpegsending', 'block_myvideos');
+        if ($this->_config->server != 'localhost') {
+            if (!@ssh2_scp_send($this->_cnx, $_FILES['uploadfile']['tmp_name'], $this->_tmpfile, $this->_defaultpermissions)) {
+                print_error('errorffmpegsending', 'block_myvideos');
+            }
+        } else {
+            if (!copy($_FILES['uploadfile']['tmp_name'], $this->_tmpfile)) {
+                print_error('errorcheckpermissions', 'block_myvideos');
+            }
+            if (!chmod($this->_tmpfile, $this->_defaultpermissions)) {
+                print_error('errorcheckpermissions', 'block_myvideos');
+            }
         }
 
         // Check filetype (file command)
@@ -127,7 +140,6 @@ class ffmpeg_class {
     
     /**
      * Encodes the file with ffmpeg, if fails, it tries to pass through mencoder first
-     *
      */
     function encode_video() {
         
@@ -160,7 +172,7 @@ class ffmpeg_class {
         // Encode video using ffmpeg
         $command = 'ffmpeg -i '.$this->_tmpfile.' -ar 44100 '.$bitratestring.' '.$this->_convertedfile;
         $feedback = $this->execute_command($command);
-        
+
         // If it can't be encoded we try to encode with mencoder
         if (!strstr($feedback, 'Press [q] to stop encoding')) {
             
@@ -195,6 +207,7 @@ class ffmpeg_class {
     /**
      * Create a thumbnail from .flv file
      *
+     * 
      */
     function create_thumbnail() {
         
@@ -302,11 +315,22 @@ class ffmpeg_class {
                     print_error('errorcheckpermissions', 'block_myvideos');
             }
         }
-        if (!@ssh2_scp_recv($this->_cnx, $this->_convertedfile, $videopath) ||
-            !@ssh2_scp_recv($this->_cnx, $this->_thumb, $thumbpath)) {
-                
-            $this->delete_files();
-            print_error('errorffmpegrecieving', 'block_myvideos');
+        
+        if ($this->_config->server != 'localhost') {
+            if (!@ssh2_scp_recv($this->_cnx, $this->_convertedfile, $videopath) ||
+                !@ssh2_scp_recv($this->_cnx, $this->_thumb, $thumbpath)) {
+                    
+                $this->delete_files();
+                print_error('errorffmpegrecieving', 'block_myvideos');
+            }
+        } else {
+            
+            if (!copy($this->_convertedfile, $videopath) ||
+                !copy($this->_thumb, $thumbpath)) {
+
+                $this->delete_files();
+                print_error('errorffmpegfile', 'block_myvideos');
+            }
         }
         
         chmod($videopath, $this->_defaultpermissions);
@@ -318,15 +342,62 @@ class ffmpeg_class {
     
     function execute_command($command) {
         
-        $stream = @ssh2_exec($this->_cnx, $command, false);
-        stream_set_blocking($stream, true);
-        
         $data = '';
-        while ( $buf = fread($stream, 4096)) {
-            $data .= $buf;
-        }
         
-        fclose($stream);
+        if ($this->_config->server != 'localhost') {
+            $stream = @ssh2_exec($this->_cnx, $command, false);
+            stream_set_blocking($stream, true);
+            
+            while ( $buf = fread($stream, 4096)) {
+                $data .= $buf;
+            }
+            fclose($stream);
+            
+        // http://lists.mplayerhq.hu/pipermail/ffmpeg-user/2006-October/004773.html
+        } else {
+            
+            $descriptorspec = array(0 => array("pipe", "r"),  // stdin is a pipe that the child will read from
+                                    1 => array("pipe", "w"),  // stdout is a pipe that the child will write to
+                                    2 => array("pipe", "w") // stderr is a file to write to
+                                   );
+            
+            $pipes= array();
+            $process = proc_open($command, $descriptorspec, $pipes);
+            if (!is_resource($process)) {
+                return false;
+            }
+            
+            fclose($pipes[0]);
+
+            stream_set_blocking($pipes[1],false);
+            stream_set_blocking($pipes[2],false);
+        
+            $todo = array($pipes[1],$pipes[2]);
+        
+            while( true ) {
+                $read = array();
+                if( !feof($pipes[1]) ) $read[]= $pipes[1];
+                if( !feof($pipes[2]) ) $read[]= $pipes[2];
+        
+                if (!$read) break;
+        
+                $ready = stream_select($read, $write=NULL, $ex= NULL, 2);
+        
+                if ($ready === false) {
+                    break; #should never happen - something died
+                }
+        
+                foreach ($read as $r) {
+                    $s = fread($r, 1024);
+                    $data .= $s;
+                }
+            }
+        
+            fclose($pipes[1]);
+            fclose($pipes[2]);
+        
+            proc_close($process);
+        }
         
         return $data;
     }
