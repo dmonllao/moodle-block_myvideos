@@ -1,4 +1,4 @@
-<?php // $Id: myvideos_uploadvideo_class.php,v 1.2 2010/07/06 08:11:14 davmon Exp $
+<?php // $Id: myvideos_uploadvideo_class.php,v 1.3 2010/11/04 11:14:41 davmon Exp $
 
 /**
  * Class to view add an uploaded video
@@ -34,10 +34,9 @@ class myvideos_uploadvideo_class extends myvideos_actionable {
             
             $ffmpeg = new ffmpeg_class();
             
-            // With form input name
-            $ffmpeg->check_file('uploadvideo');
-            $ffmpeg->encode_video('uploadvideo');
-            $ffmpeg->create_thumbnail('uploadvideo');
+            $ffmpeg->check_file();
+            $ffmpeg->encode_video();
+            $ffmpeg->create_thumbnail();
             
             
             $now = time();
