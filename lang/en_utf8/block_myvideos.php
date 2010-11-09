@@ -1,4 +1,4 @@
-<?php // $Id: block_myvideos.php,v 1.3 2010/09/09 09:56:14 davmon Exp $
+<?php // $Id: block_myvideos.php,v 1.4 2010/11/09 11:55:59 davmon Exp $
 
 $string['accessdenied'] = 'Access denied';
 $string['addtofavorites'] = 'add to favorites';
@@ -47,10 +47,15 @@ $string['qualitylow'] = 'Low';
 $string['qualitymedium'] = 'Medium';
 $string['searchdescription'] = 'Add videos description search';
 $string['settingmoodlepath'] = 'Path to store encoded files';
+$string['settingmoodlepathtext'] = 'The path where the videos repository will be stored, the path should not be accessible via URL';
 $string['settingpassword'] = 'Username password';
+$string['settingpasswordtext'] = 'The server user password to connect through SSH (if FFmpeg and Moodle are installed on the same machine it will be ignored)';
 $string['settingpath'] = 'Path to store files to encode';
-$string['settingserver'] = 'ffmpeg server';
-$string['settingusername'] = 'Server username';
+$string['settingpathtext'] = 'Temporal path to store videos';
+$string['settingserver'] = 'FFmpeg server';
+$string['settingservertext'] = 'The server which manages the encoding through ffmpeg command (FFmpeg server package not required) if the moodle server will be used as FFmpeg server set that setting to \'localhost\'';
+$string['settingusername'] = 'Username';
+$string['settingusernametext'] = 'The server user to connect through SSH (if FFmpeg and Moodle are installed on the same machine it will be ignored)';
 $string['terms'] = 'Use terms';
 $string['termsok'] = 'I accept the terms of use';
 $string['termstext'] = 'a) The content you will publish, it\'s only for learning objectives. '.chr(13).chr(10).'
