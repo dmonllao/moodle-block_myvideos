@@ -1,4 +1,4 @@
-<?php // $Id: block_myvideos.php,v 1.3 2010/09/09 09:56:14 davmon Exp $
+<?php // $Id: block_myvideos.php,v 1.4 2010/11/09 11:55:59 davmon Exp $
 
 $string['accessdenied'] = 'Accés denegat';
 $string['addtofavorites'] = 'afegir a favorits';
@@ -47,10 +47,15 @@ $string['qualitylow'] = 'Baixa';
 $string['qualitymedium'] = 'Mitjana';
 $string['searchdescription'] = 'Buscar també a la descripció dels videos';
 $string['settingmoodlepath'] = 'Ruta per desar els fitxers codificats';
-$string['settingpassword'] = 'Clau d\'accés de l\'usuari';
-$string['settingpath'] = 'Ruta on desar els fitxers a codificar (després s\'eliminen)';
+$string['settingmoodlepathtext'] = 'Ruta on es guardarà físicament el repositori de videos';
+$string['settingpassword'] = 'Clau d\'accés';
+$string['settingpasswordtext'] = 'Clau d\'accés de l\'usuari per connectar via SSH (si s\'utilitza el mateix servidor que per moodle aquest valor s\'ignora)';
+$string['settingpath'] = 'Ruta on desar els fitxers a codificar';
+$string['settingpathtext'] = 'Ruta on desar temporalment els fitxers a codificar';
 $string['settingserver'] = 'Servidor d\'ffmpeg';
-$string['settingusername'] = 'Nom d\'usuari per connectar al servidor';
+$string['settingservertext'] = 'Servidor d\'ffmpeg (no és necessari tenir instal·lat el paquet FFmpeg server al servidor, només el client) si s\'utilitza el mateix servidor que per moodle introduïr \'localhost\'';
+$string['settingusername'] = 'Nom d\'usuari';
+$string['settingusernametext'] = 'Usuari per connectar per SSH al servidor (si s\'utilitza el mateix servidor que per moodle aquest valor s\'ignora)';
 $string['terms'] = 'Termes d\'ús';
 $string['termsok'] = 'Accepto els temes d\'ús';
 $string['termstext'] = 'a) El contingut que estàs a punt de publicar en aquesta secció, té l\'objectiu exclusiu d\'estar destinat a la docència. '.chr(13).chr(10).'

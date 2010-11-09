@@ -1,4 +1,4 @@
-<?php // $Id: block_myvideos.php,v 1.3 2010/09/09 09:56:14 davmon Exp $
+<?php // $Id: block_myvideos.php,v 1.4 2010/11/09 11:55:59 davmon Exp $
 
 $string['accessdenied'] = 'Acceso denegado';
 $string['addtofavorites'] = 'añadir a favoritos';
@@ -47,10 +47,15 @@ $string['qualitylow'] = 'Baja';
 $string['qualitymedium'] = 'Mediana';
 $string['searchdescription'] = 'Buscar también en la descripción de los videos';
 $string['settingmoodlepath'] = 'Ruta dónde guardar los ficheros codificados';
-$string['settingpassword'] = 'Clave de acceso del usuario';
-$string['settingpath'] = 'Ruta donde guardar los ficheros a codificar (después se eliminan)';
+$string['settingmoodlepathtext'] = 'Ruta dónde se creará el repositorio de videos';
+$string['settingpassword'] = 'Clave de acceso';
+$string['settingpasswordtext'] = 'Clave de acceso del usuario para conectarse al servidor a través de SSH (si se usa el mismo servidor de moodle este parámetro se ignorará)';
+$string['settingpath'] = 'Ruta donde guardar los ficheros a codificar';
+$string['settingpathtext'] = 'Ruta donde guardar temporalmente los ficheros a codificar';
 $string['settingserver'] = 'Servidor de ffmpeg';
-$string['settingusername'] = 'Nombre de usuario para conectarse al servidor de ffmpeg';
+$string['settingservertext'] = 'Servidor de ffmpeg, no es necesario instalar el paquete FFmpeg server en el servidor, solo el paquete FFmpeg, si se usa el mismo servidor de moodle introducir \'localhost\'';
+$string['settingusername'] = 'Nombre de usuario';
+$string['settingusernametext'] = 'Nombre de usuario para conectarse al servidor de ffmpeg a través de SSH (si se usa el mismo servidor de moodle este parámetro se ignorará)';
 $string['terms'] = 'Condiciones de uso';
 $string['termsok'] =  'Acepto las condiciones de uso';
 $string['termstext'] = 'a) El contenido que estás a punto de publicar en esta sección, tiene el objectivo exclusivo de estar destinado a la docencia. '.chr(13).chr(10).'
