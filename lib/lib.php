@@ -1,4 +1,4 @@
-<?php // $Id: lib.php,v 1.3 2010/09/09 09:56:14 davmon Exp $
+<?php // $Id: lib.php,v 1.4 2010/11/10 08:31:54 davmon Exp $
 
 
 /**
@@ -110,7 +110,7 @@ function myvideos_show_video($videodata, $preview=false, $limitedsize=false, $cm
         }
         
         // ext param added to avoid the flv player detection of the video extension
-        $fileurl .= '&amp;ext=flv';
+        $fileurl .= '&amp;ext=.flv';
         $fileurl = urlencode($fileurl);
         
         echo '<object id="id_flvplayer" style="width:'.$video->width.'px;height:'.$video->height.'px;">';
