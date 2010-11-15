@@ -1,9 +1,9 @@
-<?php // $Id: settings.php,v 1.2 2010/11/09 11:56:13 davmon Exp $
+<?php // $Id: settings.php,v 1.3 2010/11/15 07:36:25 davmon Exp $
 
 $vars = array();
 
 $vars[] = new admin_setting_configtext('server', get_string('settingserver', 'block_myvideos'),
-                   get_string('settingservertext', 'block_myvideos'), '', PARAM_URL);
+                   get_string('settingservertext', 'block_myvideos'), 'localhost', PARAM_URL);
 
 $vars[] = new admin_setting_configtext('username', get_string('settingusername', 'block_myvideos'),
                    get_string('settingusernametext', 'block_myvideos'), '', PARAM_TEXT);
