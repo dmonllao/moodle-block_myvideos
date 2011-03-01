@@ -1,4 +1,4 @@
-<?php // $Id: getfile.php,v 1.2 2010/07/06 07:54:42 davmon Exp $
+<?php // $Id: getfile.php,v 1.3 2011/03/01 11:14:14 davmon Exp $
  
 /**
  * Gets a file from the videos repository
@@ -50,8 +50,9 @@ if ($thumb) {
     $resource = $video->video;
 }
 
-$filepath = rtrim(get_config('blocks/myvideos', 'moodlepath'), '/').'/'.$video->userid.'/'.$dir.'/'.$resource;
+session_write_close();
 
+$filepath = rtrim(get_config('blocks/myvideos', 'moodlepath'), '/').'/'.$video->userid.'/'.$dir.'/'.$resource;
 send_file($filepath, $resource);
 
 ?>
