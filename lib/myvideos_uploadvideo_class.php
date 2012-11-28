@@ -26,22 +26,17 @@ class myvideos_uploadvideo_class extends myvideos_actionable {
             if (!confirm_sesskey()) {
                 print_error('errorwrongsesskey', 'block_myvideos');
             }
-        
-            // Dirty hack to avoid notice
-            if (empty($data->allowcomments)) {
-                $data->allowcomments = '0';
-            }
-            
+
             $ffmpeg = new ffmpeg_class();
+            
+            $path = rtrim(get_config('blocks/myvideos', 'moodlepath'), '/').'/'.$USER->id;
             
             $ffmpeg->check_file();
             $ffmpeg->encode_video();
             $ffmpeg->create_thumbnail();
             
-            
             $now = time();
             $randomstring = rand(10, 99);
-            $path = rtrim(get_config('blocks/myvideos', 'moodlepath'), '/').'/'.$USER->id;
             
             $videoname = $USER->id.'_'.$now.'_'.$randomstring.'.flv';
             $ffmpeg->rename_video($videoname);
@@ -58,6 +53,8 @@ class myvideos_uploadvideo_class extends myvideos_actionable {
             
             $ffmpeg->get_files($videopath, $thumbpath);
             
+            $this->db_reconnect();
+            
             $video->userid = $USER->id;
             $video->link = '0';
             $video->publiclevel = $data->publiclevel;
@@ -73,7 +70,7 @@ class myvideos_uploadvideo_class extends myvideos_actionable {
             $video->id = insert_record('myvideos_video', $video);
             
             if (!$video->id) {
-                print_error('errorcant', 'block_myvideos');
+                print_error('errorinserting', 'block_myvideos');
             }
                
             // Video-keywords relation
@@ -87,6 +84,27 @@ class myvideos_uploadvideo_class extends myvideos_actionable {
             $redirecturl = $CFG->wwwroot.'/blocks/myvideos/index.php?action=viewvideo&amp;courseid='.$this->_courseid.'&amp;id='.$video->id;
             redirect($redirecturl, get_string("changessaved"));
         }
+    }
+    
+    
+    /**
+     * For installations with low wait DB connection timeout
+     */
+    function db_reconnect() {
+        global $CFG, $db;
+        
+        $db->Disconnect();
+        
+        if (!isset($CFG->dbpersist) or !empty($CFG->dbpersist)) {    // Use persistent connection (default)
+            $dbconnected = $db->PConnect($CFG->dbhost,$CFG->dbuser,$CFG->dbpass,$CFG->dbname);
+        } else {                                                     // Use single connection
+            $dbconnected = $db->Connect($CFG->dbhost,$CFG->dbuser,$CFG->dbpass,$CFG->dbname);
+        }
+        
+        if (!$dbconnected) {
+            print_error('errorinserting', 'block_myvideos');
+        }
+        configure_dbconnection();
     }
     
 }

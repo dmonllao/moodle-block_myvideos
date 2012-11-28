@@ -137,10 +137,16 @@ class myvideos_searchvideos_class extends myvideos_actionable {
                         echo get_string("addtofavorites", "block_myvideos").'</a></div>';
                     }
                     
-                    // Link to play video at normal size
+                    
                     if ($publiclevel == 2) {
+                        
+                        // Link to play video at normal size
                         echo '<div><a href="'.$CFG->wwwroot.'/blocks/myvideos/view.php?action=view&amp;videoid='.$result->id.'">';
                         echo get_string("titleviewvideo", "block_myvideos").'</a></div>';
+                        
+                        // Link to embed the video
+                        $getembedurl = $CFG->wwwroot.'/blocks/myvideos/view.php?action=getembedcode&amp;videoid='.$result->id;
+                        echo element_to_popup_window('link', $getembedurl, 'getembed_'.$result->id, get_string("getembedcode", "block_myvideos"), 400, 500, null, null, true);
                     }
                     
                     echo '</div>';

@@ -29,11 +29,6 @@ class myvideos_linkvideo_class extends myvideos_actionable {
                 print_error('errorwrongsesskey', 'block_myvideos');
             }
             
-            // Dirty hack to avoid notice caused by checkbox empty value
-            if (empty($data->allowcomments)) {
-                $data->allowcomments = '0';
-            }
-            
             $video->userid = $USER->id;
             $video->title = $data->title;
             $video->description = $data->description;
