@@ -16,6 +16,15 @@ div.myvideos_box {
     text-align: center;
 }
  
+span.myvideos_action {
+    border-style: solid;
+    border-width: 1px;
+    padding: 2px 4px 2px 4px;
+    margin: 5px;
+    text-align: center;
+    font-size: 13px;
+}
+
 /**
  * My videos player
  */
@@ -33,6 +42,16 @@ div.myvideos_description {
     width: 60%;
     margin: 0 auto 40px auto;
     padding: 2px;
+}
+
+div.myvideos_download {
+    border-style: solid;
+    border-width: 1px;
+    border-color: #CCCCCC;
+    width: 20%;
+    margin: 0 auto 20px auto;
+    padding: 2px;
+    text-align: center;
 }
 
 h2.myvideos_title {
@@ -78,6 +97,11 @@ h2.myvideos_title {
 	font-size: 80%;
 }
 
+#myvideos_embed {
+    text-align: center;
+    display: none;
+    visibility: hidden;
+}
 
 /**
  * Comments

@@ -51,7 +51,7 @@ class myvideos_form extends moodleform {
         $mform->setHelpButton('publiclevel', array('privacity', get_string('publiclevel', 'block_myvideos'), 'block_myvideos'));
         
         // Allow comments
-        $mform->addElement('checkbox', 'allowcomments', get_string('allowcomments', 'block_myvideos'));
+        $mform->addElement('advcheckbox', 'allowcomments', get_string('allowcomments', 'block_myvideos'), '', array('group' => 1), array(0, 1));
         $mform->setHelpButton('allowcomments', array('comments', get_string('allowcomments', 'block_myvideos'), 'block_myvideos'));
         $mform->setType('allowcomments', PARAM_BOOL);
         

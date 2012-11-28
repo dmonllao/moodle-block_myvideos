@@ -28,32 +28,34 @@ if ($videoid) {
 
 
 // Header
-$title = get_string('title', 'block_myvideos');
+if ($action != 'embed') {
+    $title = get_string('title', 'block_myvideos');
+    
+    $navlinks = array();
+    $navlinks[] = array('name' => $title, 'link' => $viewlink, 'type' => 'block');
+    if ($videoid) {
+        $navlinks[] = array('name' => $videodata->title, 'link' => null, 'type' => 'block');
+    }
+    
+    $navigation = build_navigation($navlinks);
+    
+    $CFG->stylesheets[] = $CFG->wwwroot.'/blocks/myvideos/myvideos.css';
+    print_header($SITE->fullname, $SITE->fullname, $navigation);
+    
+    if ($videoid) {
+        print_heading($videodata->title);
+    } else {
+        print_heading($title);
+    }
+    
+    print_spacer(20);
 
-$navlinks = array();
-$navlinks[] = array('name' => $title, 'link' => $viewlink, 'type' => 'block');
-if ($videoid) {
-    $navlinks[] = array('name' => $videodata->title, 'link' => null, 'type' => 'block');
+
+    // Search div
+    echo '<div id="myvideos_public_searchbox">';
+
+    echo '</div>';
 }
-
-$navigation = build_navigation($navlinks);
-
-$CFG->stylesheets[] = $CFG->wwwroot.'/blocks/myvideos/myvideos.css';
-print_header($SITE->fullname, $SITE->fullname, $navigation);
-
-if ($videoid) {
-    print_heading($videodata->title);
-} else {
-    print_heading($title);
-}
-
-print_spacer(20);
-
-
-// Search div
-echo '<div id="myvideos_public_searchbox">';
-
-echo '</div>';
 
 
 switch ($action) {
@@ -82,11 +84,18 @@ switch ($action) {
         
         break;
         
+    case 'embed':
+        
+        myvideos_show_video($videodata, false, true);
+        break;
+        
     default:
         break;
 }
 
 
-print_footer();
+if ($action != 'embed' && $action != 'getembedcode') {
+    print_footer();
+}
 
 ?>
