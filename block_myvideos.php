@@ -35,6 +35,12 @@ class block_myvideos extends block_list {
     
     
     function applicable_formats() {
+        
+        global $COURSE;
+        
+        if (!has_capability('block/myvideos:manage', get_context_instance(CONTEXT_COURSE, $COURSE->id))) {
+            return array();
+        }
         return array('all' => true);
     }
 }

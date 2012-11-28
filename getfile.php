@@ -24,7 +24,7 @@ if (!$video || $video->link == 1) {
 
 
 // Private video 
-if ($video->publiclevel == 0 && $video->userid != $USER->id) {
+if ($video->publiclevel == 0 && $video->userid != $USER->id && !has_capability('moodle/site:doanything', get_context_instance(CONTEXT_SYSTEM))) {
     
     // The petition should come from the module
     if (!$cmid) {
@@ -37,7 +37,7 @@ if ($video->publiclevel == 0 && $video->userid != $USER->id) {
     }
     
 // Moodle video (only accessible to authenticated Moodle users
-} else if ($video->publiclevel == 1 && $USER->id == 0) {
+} else if ($video->publiclevel == 1 && $USER->id == 0 && !has_capability('moodle/site:doanything', get_context_instance(CONTEXT_SYSTEM))) {
     die();
 }
 

@@ -30,6 +30,7 @@ $string['favoritevideoslabel'] = 'Videos favoritos';
 $string['fileconversionerror'] = 'Error de conversión';
 $string['filetoupload'] = 'Archivo a subir';
 $string['filter'] = 'Filtrar videos';
+$string['getembedcode'] = '&lt;Embed&gt;';
 $string['keywords'] = 'Palabras clave';
 $string['loading'] = 'Cargando';
 $string['myvideos:favoritevideo'] = 'Añadir a favoritos';
@@ -47,22 +48,19 @@ $string['qualitylow'] = 'Baja';
 $string['qualitymedium'] = 'Mediana';
 $string['searchdescription'] = 'Buscar también en la descripción de los videos';
 $string['settingmoodlepath'] = 'Ruta dónde guardar los ficheros codificados';
-$string['settingmoodlepathtext'] = 'Ruta dónde se creará el repositorio de videos';
-$string['settingpassword'] = 'Clave de acceso';
-$string['settingpasswordtext'] = 'Clave de acceso del usuario para conectarse al servidor a través de SSH (si se usa el mismo servidor de moodle este parámetro se ignorará)';
-$string['settingpath'] = 'Ruta donde guardar los ficheros a codificar';
-$string['settingpathtext'] = 'Ruta donde guardar temporalmente los ficheros a codificar';
+$string['settingpassword'] = 'Clave de acceso del usuario';
+$string['settingpath'] = 'Ruta donde guardar los ficheros a codificar (después se eliminan)';
 $string['settingserver'] = 'Servidor de ffmpeg';
-$string['settingservertext'] = 'Servidor de ffmpeg, no es necesario instalar el paquete FFmpeg server en el servidor, solo el paquete FFmpeg, si se usa el mismo servidor de moodle introducir \'localhost\'';
-$string['settingusername'] = 'Nombre de usuario';
-$string['settingusernametext'] = 'Nombre de usuario para conectarse al servidor de ffmpeg a través de SSH (si se usa el mismo servidor de moodle este parámetro se ignorará)';
+$string['settingusername'] = 'Nombre de usuario para conectarse al servidor de ffmpeg';
 $string['terms'] = 'Condiciones de uso';
 $string['termsok'] =  'Acepto las condiciones de uso';
 $string['termstext'] = 'a) El contenido que estás a punto de publicar en esta sección, tiene el objectivo exclusivo de estar destinado a la docencia. '.chr(13).chr(10).'
 b) El contenido protegido por derechos de autor de terceros únicamente podrá ser usado con el consentimiento del titular. Si es el caso, se hará referencia de la autoria llenando el campo \"Autor\" del formulario de esta página.'.chr(13).chr(10).'
 c) En ningún caso se podrán publicar documentos audiovisuales que contengan contenido pornográfico o sexo explícito, ni aquellos con contenido amenazador o que incite a la violencia, al racismo, la xenofobia o a la discriminación de cualquier tipo. Tampoco se podrá publicar material protegido por la normativa de derechos de autor, ni con carácter difamatorio.'.chr(13).chr(10).'
 d) Usted reconoce y accepta ser el único responsable del archivo y de las consecuencias de su publicación.'.chr(13).chr(10).'
-e) El hecho de pulsar el botón \"Subir el video\" implica la conformidad de estas condiciones de uso.';
+e) Este sitio web no es responsable de los archivos publicados en esta sección.'.chr(13).chr(10).'
+f) Este sitio web se reserva el derecho de emprender las acciones legales oportunas en el caso de incumplimiento legal o que existeixan hechos constitutivos de delito.'.chr(13).chr(10).'
+g) El hecho de pulsar el botón \"Subir el video\" implica la conformidad de estas condiciones de uso.';
 $string['therearenovideos'] = 'No hay videos';
 $string['thumberror'] = 'Error creando la imagen en miniatura';
 $string['title'] = 'Mis videos';

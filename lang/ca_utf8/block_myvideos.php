@@ -30,6 +30,7 @@ $string['favoritevideoslabel'] = 'Videos favorits';
 $string['fileconversionerror'] = 'Error de conversió';
 $string['filetoupload'] = 'Arxiu a pujar';
 $string['filter'] = 'Filtrar vídeos';
+$string['getembedcode'] = '&lt;Embed&gt;';
 $string['keywords'] = 'Paraules clau';
 $string['loading'] = 'Carregant';
 $string['myvideos:favoritevideo'] = 'Afegir a favorits';
@@ -47,22 +48,19 @@ $string['qualitylow'] = 'Baixa';
 $string['qualitymedium'] = 'Mitjana';
 $string['searchdescription'] = 'Buscar també a la descripció dels videos';
 $string['settingmoodlepath'] = 'Ruta per desar els fitxers codificats';
-$string['settingmoodlepathtext'] = 'Ruta on es guardarà físicament el repositori de videos';
-$string['settingpassword'] = 'Clau d\'accés';
-$string['settingpasswordtext'] = 'Clau d\'accés de l\'usuari per connectar via SSH (si s\'utilitza el mateix servidor que per moodle aquest valor s\'ignora)';
-$string['settingpath'] = 'Ruta on desar els fitxers a codificar';
-$string['settingpathtext'] = 'Ruta on desar temporalment els fitxers a codificar';
+$string['settingpassword'] = 'Clau d\'accés de l\'usuari';
+$string['settingpath'] = 'Ruta on desar els fitxers a codificar (després s\'eliminen)';
 $string['settingserver'] = 'Servidor d\'ffmpeg';
-$string['settingservertext'] = 'Servidor d\'ffmpeg (no és necessari tenir instal·lat el paquet FFmpeg server al servidor, només el client) si s\'utilitza el mateix servidor que per moodle introduïr \'localhost\'';
-$string['settingusername'] = 'Nom d\'usuari';
-$string['settingusernametext'] = 'Usuari per connectar per SSH al servidor (si s\'utilitza el mateix servidor que per moodle aquest valor s\'ignora)';
+$string['settingusername'] = 'Nom d\'usuari per connectar al servidor';
 $string['terms'] = 'Termes d\'ús';
 $string['termsok'] = 'Accepto els temes d\'ús';
 $string['termstext'] = 'a) El contingut que estàs a punt de publicar en aquesta secció, té l\'objectiu exclusiu d\'estar destinat a la docència. '.chr(13).chr(10).'
 b) El contingut protegit pels drets d\'autor de tercers únicament podrà ser usat amb el consentiment del titular. Si és el cas, se\'n farà referència de l\'autoria omplint el camp \"Autor\" del formulari d\'aquesta pàgina.'.chr(13).chr(10).'
 c) En cap cas es podran publicar documents audiovisuals que continguin contingut pornogràfic o sexe explícit, ni aquells amb contingut amenaçador o que inciti a la violència, al racisme, la xenofòbia o a la discriminació de qualsevol tipus. Tampoc es podrà publicar material protegit per la normativa de drets d\'autor, ni amb caràcter difamatori.'.chr(13).chr(10).'
 d) Vostè reconeix i accepta ser l\'únic responsable de l\'arxiu i de les conseqüències de la seva publicació.'.chr(13).chr(10).'
-e) El fet de prémer el botó \"Pujar el vídeo\" implica la conformitat d\'aquestes condicions d\'ús.';
+e) Aquest lloc web no és responsable dels arxius publicats en aquesta secció.'.chr(13).chr(10).'
+f) Aquest lloc web es reserva el dret d\'emprendre les accions legals oportunes en el cas d\'incompliment legal o que existeixen fets constitutius de delicte.'.chr(13).chr(10).'
+g) El fet de prémer el botó \"Pujar el vídeo\" implica la conformitat d\'aquestes condicions d\'ús.';
 $string['therearenovideos'] = 'No hi ha videos';
 $string['thumberror'] = 'Error creant la imatge de previsualització';
 $string['title'] = 'Els meus videos';
