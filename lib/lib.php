@@ -87,7 +87,6 @@ function myvideos_show_video($videodata, $preview=false, $limitedsize=false, $cm
         $divclass = 'myvideos_videoplayer';
     }
     
-    
     echo '<div class="'.$divclass.' resourcecontent resourceflv">';
     
     // File linked from youtube, vimeo...
@@ -106,11 +105,11 @@ function myvideos_show_video($videodata, $preview=false, $limitedsize=false, $cm
         
         // Add the course_module to check the private video access
         if ($cmid) {
-            $fileurl .= '&amp;cmid='.$cmid;
+            $fileurl .= '&cmid='.$cmid;
         }
         
         // ext param added to avoid the flv player detection of the video extension
-        $fileurl .= '&amp;ext=.flv';
+        $fileurl .= '&ext=.flv';
         $fileurl = urlencode($fileurl);
         
         echo '<object id="id_flvplayer" style="width:'.$video->width.'px;height:'.$video->height.'px;">';
@@ -137,7 +136,7 @@ function myvideos_show_video($videodata, $preview=false, $limitedsize=false, $cm
         echo '</object>';
     }
     
-    echo '</div>';
+    echo '</div>';    
 }
 
 
@@ -151,25 +150,39 @@ function myvideos_show_video_actions($videodata, $courseid) {
     
     global $CFG, $USER;
     
-    // Actions
-    echo '<div>';
+    $actions = array();
     
-    echo ' <a href="'.$CFG->wwwroot.'/blocks/myvideos/index.php?courseid='.$courseid.'&amp;action=viewvideo&amp;id='.$videodata->id.'">'.get_string("view").'</a>';
+    // Actions
+    $actions[] = '<a href="'.$CFG->wwwroot.'/blocks/myvideos/index.php?courseid='.$courseid.'&amp;action=viewvideo&amp;id='.$videodata->id.'">'.get_string("view").'</a>';
     
     if ($videodata->favorite) {
-        echo ' <a href="'.$CFG->wwwroot.'/blocks/myvideos/index.php?courseid='.$courseid.'&amp;action=deletefavoritevideo&amp;id='.$videodata->id.'">'.get_string("delete").'</a>';
+        $actions[] = '<a href="'.$CFG->wwwroot.'/blocks/myvideos/index.php?courseid='.$courseid.'&amp;action=deletefavoritevideo&amp;id='.$videodata->id.'">'.get_string("delete").'</a>';
 
     } else {
-        echo ' <a href="'.$CFG->wwwroot.'/blocks/myvideos/index.php?courseid='.$courseid.'&amp;action=editvideo&amp;id='.$videodata->id.'">'.get_string("edit").'</a>';
-        echo ' <a href="'.$CFG->wwwroot.'/blocks/myvideos/index.php?courseid='.$courseid.'&amp;action=deletevideo&amp;id='.$videodata->id.'">'.get_string("delete").'</a>';
+        $actions[] = '<a href="'.$CFG->wwwroot.'/blocks/myvideos/index.php?courseid='.$courseid.'&amp;action=editvideo&amp;id='.$videodata->id.'">'.get_string("edit").'</a>';
+        $actions[] = '<a href="'.$CFG->wwwroot.'/blocks/myvideos/index.php?courseid='.$courseid.'&amp;action=deletevideo&amp;id='.$videodata->id.'">'.get_string("delete").'</a>';
     }
     
     // Only the uploader can download the encoded video
-    if ($USER->id == $videodata->userid) {
-        echo ' <a href="'.$CFG->wwwroot.'/blocks/myvideos/getfile.php?videoid='.$videodata->id.'">'.get_string("download", "block_myvideos").'</a>';
+    if ($USER->id == $videodata->userid || $videodata->public == 2) {
+        $actions[] = '<a href="'.$CFG->wwwroot.'/blocks/myvideos/getfile.php?videoid='.$videodata->id.'">'.get_string("download", "block_myvideos").'</a>';
+        
+        $actions[] = '<a href="#" onclick="return myvideos_display_embed_code();">'.get_string("getembedcode", "block_myvideos").'</a>';
+    }
+    
+    
+    echo '<div>';
+    foreach ($actions as $action) {
+        echo '<span class="myvideos_action">'.$action.'</span>';
     }
     echo '</div>';
     
+    // Embed
+    $url = $CFG->wwwroot.'/blocks/myvideos/view.php?action=embed&videoid='.$videodata->id;
+    $code = '<iframe src="'.$url.'" width="440" height="357" frameborder="0">'.chr(13).chr(10);
+    $code.= 'No frames support'.chr(13).chr(10);
+    $code.= '</iframe>';
+    echo '<div id="myvideos_embed" ><br/><textarea rows="8" cols="50">'.$code.'</textarea></div>';
     
     // Filters
     require_once($CFG->dirroot.'/blocks/myvideos/forms/myvideos_filtervideos_form.php');

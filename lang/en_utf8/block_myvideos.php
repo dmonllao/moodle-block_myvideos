@@ -30,6 +30,7 @@ $string['favoritevideoslabel'] = 'Favorite videos';
 $string['fileconversionerror'] = 'File conversion error';
 $string['filetoupload'] = 'File to upload';
 $string['filter'] = 'Filter videos';
+$string['getembedcode'] = '&lt;Embed&gt;';
 $string['keywords'] = 'Keywords';
 $string['loading'] = 'Loading';
 $string['myvideos:favoritevideo'] = 'Add to favorites';
@@ -47,22 +48,19 @@ $string['qualitylow'] = 'Low';
 $string['qualitymedium'] = 'Medium';
 $string['searchdescription'] = 'Add videos description search';
 $string['settingmoodlepath'] = 'Path to store encoded files';
-$string['settingmoodlepathtext'] = 'The path where the videos repository will be stored, the path should not be accessible via URL';
 $string['settingpassword'] = 'Username password';
-$string['settingpasswordtext'] = 'The server user password to connect through SSH (if FFmpeg and Moodle are installed on the same machine it will be ignored)';
 $string['settingpath'] = 'Path to store files to encode';
-$string['settingpathtext'] = 'Temporal path to store videos';
-$string['settingserver'] = 'FFmpeg server';
-$string['settingservertext'] = 'The server which manages the encoding through ffmpeg command (FFmpeg server package not required) if the moodle server will be used as FFmpeg server set that setting to \'localhost\'';
-$string['settingusername'] = 'Username';
-$string['settingusernametext'] = 'The server user to connect through SSH (if FFmpeg and Moodle are installed on the same machine it will be ignored)';
+$string['settingserver'] = 'ffmpeg server';
+$string['settingusername'] = 'Server username';
 $string['terms'] = 'Use terms';
 $string['termsok'] = 'I accept the terms of use';
-$string['termstext'] = 'a) The content you will publish, it\'s only for learning objectives. '.chr(13).chr(10).'
-b) The content protected by thirds copyrights only can be used with permission. In that case, a reference must be added to the author form field.'.chr(13).chr(10).'
-c) Nor pornographic nor explicit sex content allowed, nor content which incites to violence, racism, xenophobia o any kind of discrimination. Defamatory content or content protected by copyright laws aren\'t allowed.'.chr(13).chr(10).'
-d) You accept to be the only responsible of the file and their publication consequences.'.chr(13).chr(10).'
-e) You are accepting that terms clicking \"I accept the terms of use\".';
+$string['termstext'] = 'a) The content that you are about to publish in this section has the sole objective to be aimed at teaching. '. chr (13). chr (10).'
+b) Content copyright protected by third-party may only be used with the consent of the owner. If this is the case will be referred to the authorship filling the field \ "Author \" form on this page. '. Chr (13). Chr (10).'
+c) In no case may publish audiovisual documents containing pornographic or sexually explicit content, or those containing threatening or inciting violence, racism, xenophobia or discrimination of any kind. Nor may publish the material protected by copyright law, nor defamatory. '. Chr (13). Chr (10).'
+d) You acknowledge and accepts to be solely responsible for the file and the consequences of its publication. '. chr (13). chr (10).'
+e) This website is not responsible for files published in this section. '. chr (13). chr (10).'
+f) This website reserves the right to take appropriate legal action in the event of default or existeixan legal facts constituting the offense. '. chr (13). chr (10).'
+g) The act of pressing the \ "Upload a video \" implies conformity to these terms of use.';
 $string['therearenovideos'] = 'There are no videos';
 $string['thumberror'] = 'Error creating the thumbnail';
 $string['title'] = 'My videos';
