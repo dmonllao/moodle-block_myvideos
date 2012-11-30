@@ -172,17 +172,17 @@ class ffmpeg_class {
         }
 
         // Encode video using ffmpeg
-        $command = 'ffmpeg -i '.$this->_tmpfile.' -ar 44100 '.$bitratestring.' '.$this->_convertedfile;
+        $command = $this->_config->ffmpeg.' -i '.$this->_tmpfile.' -ar 44100 '.$bitratestring.' '.$this->_convertedfile;
         $feedback = $this->execute_command($command);
 
         // If it can't be encoded we try to encode with mencoder
-        if (!strstr($feedback, 'Press [q] to stop encoding')) {
+        if (!preg_match('/Press .* to stop encoding/i', $feedback)) {
 
             // Delete crashed file
             $rmcommand = 'rm '.$this->_convertedfile;
             $this->execute_command($rmcommand);
 
-            $mencodercommand = 'mencoder '.$this->_tmpfile.' -ovc lavc -oac mp3lame -o '.$this->_convertedfile.'.flv';
+            $mencodercommand = $this->_config->mencoder.' '.$this->_tmpfile.' -ovc lavc -oac mp3lame -o '.$this->_convertedfile.'.flv';
             $feedback = $this->execute_command($mencodercommand);
 
             if (!strstr($feedback, 'Writing index...')) {
@@ -193,9 +193,9 @@ class ffmpeg_class {
             }
 
             // To ffmpeg again
-            $command = 'ffmpeg -i '.$this->_convertedfile.'.flv -ar 44100 '.$bitratestring.' '.$this->_convertedfile;
+            $command = $this->_config->ffmpeg.' -i '.$this->_convertedfile.'.flv -ar 44100 '.$bitratestring.' '.$this->_convertedfile;
             $feedback = $this->execute_command($command);
-            if (!strstr($feedback, 'Press [q] to stop encoding')) {
+            if (!preg_match('/Press .* to stop encoding/i', $feedback)) {
 
                 // If we can't convert the file redirection to index
                 $this->delete_files();
@@ -215,10 +215,10 @@ class ffmpeg_class {
 
         global $CFG, $COURSE;
 
-        $thumbcommand = "ffmpeg -i ".$this->_convertedfile." -ss 00:00:01 -vframes 1 ".$this->_tmpfile.".%d.jpg";
+        $thumbcommand = $this->_config->ffmpeg." -i ".$this->_convertedfile." -ss 00:00:01 -vframes 1 ".$this->_tmpfile.".%d.jpg";
         $feedback = $this->execute_command($thumbcommand);
 
-        if (!strstr($feedback, 'Press [q] to stop encoding')) {
+        if (!preg_match('/Press .* to stop encoding/i', $feedback)) {
 
             $this->delete_files();
             redirect($CFG->wwwroot.'/blocks/myvideos/index.php?courseid='.$COURSE->id.'&amp;action=uploadvideo', get_string('thumberror', 'block_myvideos'), 5);
@@ -252,7 +252,7 @@ class ffmpeg_class {
 
     function get_video_info() {
 
-        $infocommand = 'ffmpeg  -i '.$this->_convertedfile;
+        $infocommand = $this->_config->ffmpeg.' -i '.$this->_convertedfile;
         $feedback = $this->execute_command($infocommand);
 
         // Info

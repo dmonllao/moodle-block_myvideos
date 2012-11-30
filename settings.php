@@ -10,7 +10,13 @@ $vars[] = new admin_setting_configtext('username', get_string('settingusername',
 
 $vars[] = new admin_setting_configpasswordunmask('password', get_string('settingpassword', 'block_myvideos'),
                    get_string('settingpassword', 'block_myvideos'), '');
-                   
+
+$vars[] = new admin_setting_configtext('ffmpeg', get_string('settingffmpeg', 'block_myvideos'),
+                   get_string('settingffmpegdesc', 'block_myvideos'), '/usr/bin/ffmpeg', PARAM_PATH);
+
+$vars[] = new admin_setting_configtext('mencoder', get_string('settingmencoder', 'block_myvideos'),
+                   get_string('settingmencoder', 'block_myvideos'), '/usr/bin/mencoder', PARAM_PATH);
+
 $vars[] = new admin_setting_configtext('path', get_string('settingpath', 'block_myvideos'),
                    get_string('settingpath', 'block_myvideos'), '', PARAM_PATH);
                    
