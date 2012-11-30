@@ -33,7 +33,7 @@ class myvideos_form extends moodleform {
 
         // Author
         $mform->addElement('text', 'author', get_string('videoauthor', 'block_myvideos'), array("size"=>"60"));
-        $mform->setHelpButton('author', array('author', get_string('title", "block_myvideos'), 'block_myvideos'));
+        $mform->setHelpButton('author', array('author', get_string('title', 'block_myvideos'), 'block_myvideos'));
         $mform->setType('author', PARAM_TEXT);
 
         // Tags
