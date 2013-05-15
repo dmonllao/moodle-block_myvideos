@@ -4,45 +4,50 @@
 class block_myvideos extends block_list {
 
     function init() {
-        $this->title = get_string('title', 'block_myvideos');
-        $this->version = 2010020300;
+        $this->title = get_string('pluginname', 'block_myvideos');
     }
 
     function get_content() {
-        
-        global $CFG, $USER, $COURSE;
-        
+
+        global $CFG, $USER, $COURSE, $OUTPUT;
+
         $this->content = new object();
         $this->content->items = array();
         $this->content->icons = array();
         $this->content->footer = '';
-        
+
         if ($USER->id == 0) {
             return $this->content;
-        } 
-        
-        $context = get_context_instance(CONTEXT_COURSE, $this->instance->pageid);
-        
-        if (has_capability('block/myvideos:manage', $context)) {
-            $this->content->items[] = '<a href="'.$CFG->wwwroot.'/blocks/myvideos/index.php?courseid='.$COURSE->id.'">'.get_string('title', 'block_myvideos').'</a>';
-            $this->content->icons[] = '<img src="'.$CFG->wwwroot.'/blocks/myvideos/pix/icon.gif" class="icon">';
         }
-         
+
+        $context = context_course::instance($COURSE->id);
+
+        if (has_capability('block/myvideos:manage', $context)) {
+
+            $url = $CFG->wwwroot . '/blocks/myvideos/index.php?courseid='.$COURSE->id;
+            $pixurl = $OUTPUT->pix_url('icon', 'block_myvideos');
+            $this->content->items[] = html_writer::link($url,
+                get_string('title', 'block_myvideos'));
+            $this->content->icons[] = html_writer::empty_tag('img', array('src' => $pixurl,
+               'class' => 'icon'));
+        }
+
         $this->content->footer = '';
 
         return $this->content;
     }
-    
-    
+
     function applicable_formats() {
-        
-        global $COURSE;
-        
-        if (!has_capability('block/myvideos:manage', get_context_instance(CONTEXT_COURSE, $COURSE->id))) {
-            return array();
-        }
         return array('all' => true);
+    }
+
+    /**
+     * Returns true if this block has global config.
+     *
+     * @return bool
+     */
+    public function has_config() {
+        return true;
     }
 }
 
-?>

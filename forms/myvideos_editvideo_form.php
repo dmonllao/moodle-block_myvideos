@@ -4,22 +4,19 @@ require_once($CFG->dirroot.'/blocks/myvideos/forms/myvideos_form.php');
 
 class myvideos_editvideo_form extends myvideos_form {
 
-
     function definition() {
 
         $mform = & $this->_form;
-        
+
         // title, description, author and tags
         $this->_add_common_params();
 
         $this->_add_hidden_params();
-        
+
         $mform->addElement('hidden', 'id');
+        $mform->setType('id', PARAM_INT);
 
         $mform->addElement('submit', 'submitbutton', get_string('savechanges'));
     }
 
-
 }
-
-?>

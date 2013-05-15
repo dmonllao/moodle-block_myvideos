@@ -3,21 +3,23 @@
 require_once($CFG->dirroot.'/blocks/myvideos/forms/myvideos_form.php');
 
 class myvideos_filtervideos_form extends moodleform {
-    
+
     function myvideos_filtervideos_form() {
-        
-        $styles = array('style' => 'width: 40%;');
+
+        $styles = array('style' => 'width: 40%; margin: 0px auto;');
         parent::moodleform(false, null, 'post', '', $styles);
     }
-    
-    
+
     function definition() {
-        
+        global $PAGE;
+
         $mform = & $this->_form;
 
         $mform->addElement('text', 'keywords', get_string('keywords', 'block_myvideos'), array("size"=>"40"));
-        
-        $attributes = array("onclick" => "myvideos_filter_videos();return false;");
-        $mform->addElement('submit', 'submitbutton', get_string("filter", "block_myvideos"), $attributes);
+        $mform->setType('keywords', PARAM_NOTAGS);
+
+        $mform->addElement('submit', 'submitbutton', get_string("filter", "block_myvideos"));
+
+        $PAGE->requires->yui_module('moodle-block_myvideos-filtervideos', 'M.block_myvideos.init_filter_videos', null, null, true);
     }
 }

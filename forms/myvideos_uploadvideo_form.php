@@ -4,49 +4,47 @@ require_once($CFG->dirroot.'/blocks/myvideos/forms/myvideos_form.php');
 
 class myvideos_uploadvideo_form extends myvideos_form {
 
-    
     function definition() {
 
-        global $CFG, $COURSE;
+        global $CFG, $COURSE, $PAGE;
 
-        require_js($CFG->wwwroot.'/blocks/myvideos/lib/lib.js');
-        
         $mform = & $this->_form;
 
-        $context = get_context_instance(CONTEXT_COURSE, $COURSE->id);
-        
+        $context = context_course::instance($COURSE->id);
+
         // title, description, author and tags
         $this->_add_common_params();
-        
+
         // File
-        $mform->addElement('file', 'uploadfile', get_string("filetoupload", 'block_myvideos'), array("size"=>"55"));
-        $mform->addRule('uploadfile', null, 'required', null, 'client');
+
+        $mform->addElement('filepicker', 'uploadfile', get_string('filetoupload', 'block_myvideos'), array("size"=>"55"));
+        $mform->addRule('uploadfile', null, 'required', 'client');
 
         // Quality
         if (has_capability('block/myvideos:selectquality', $context)) {
-            
+
             $qualityoptions["1"] = get_string('qualitylow', 'block_myvideos');
             $qualityoptions["2"] = get_string('qualitymedium', 'block_myvideos');
             $qualityoptions["3"] = get_string('qualityhigh', 'block_myvideos');
-            
+
             $mform->addElement('select', 'quality', get_string('quality', 'block_myvideos'), $qualityoptions);
-            $mform->setHelpButton('quality', array('quality', get_string('quality', 'block_myvideos'), 'block_myvideos'));
+            $mform->addHelpButton('quality', 'quality', 'block_myvideos');
         } else {
             $mform->addElement('hidden', 'quality', '2');
         }
-        
+
         // Terms of use
         $this->_add_terms();
 
         $this->_add_hidden_params();
 
-        $mform->addElement('submit', 'submitbutton', get_string('savechanges'), array("onclick"=>"myvideos_submit_upload();"));
-        
+        $mform->addElement('submit', 'submitbutton', get_string('savechanges'));
         // After the client checking of the required fields id_loader is displayed
         $loaderdiv = myvideos_uploadform_loader();
         $mform->addElement('html', $loaderdiv);
+
+        // Init the onclick event for the submit button
+        $PAGE->requires->yui_module('moodle-block_myvideos-uploadvideo', 'M.block_myvideos.init_uploadvideoform', null, null, true);
     }
 
 }
-
-?>

@@ -12,9 +12,6 @@ $tabsarray[] = 'videos';
 if (has_capability('block/myvideos:uploadvideo', $context)) {
     $tabsarray[] = 'uploadvideo';
 }
-if (has_capability('block/myvideos:linkvideo', $context)) {
-    $tabsarray[] = 'linkvideo';
-}
 $tabsarray[] = 'searchvideos';
 
 

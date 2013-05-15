@@ -4,10 +4,9 @@
 /**
  * Class to manage the video encoding
  *
- * @uses      ssh2 (http://php.net/manual/en/book.ssh2.php)
- * @uses      ffmpeg (http://ffmpeg.org/)
- * @uses      mencoder (http://www.mplayerhq.hu)
- *
+ * @uses        ssh2 (http://php.net/manual/en/book.ssh2.php)
+ * @uses        ffmpeg (http://ffmpeg.org/)
+ * @uses        mencoder (http://www.mplayerhq.hu)
  * @package      blocks/myvideos
  * @copyright    2010 David Monllao <david.monllao@urv.cat>
  * @license      http://www.gnu.org/licenses/gpl-2.0.txt
@@ -22,6 +21,9 @@ class ffmpeg_class {
     var $_quality;
     var $_defaultpermissions;
 
+    var $_tmplocalpath;
+    var $_tmplocalitemid;
+
     // Absolute rute
     var $_tmpfile;
     var $_convertedfile;
@@ -31,17 +33,19 @@ class ffmpeg_class {
     var $_overrideffmpeg;
     var $_qualitysubmitted;
 
-
     /**
      * Adds block configuration to private var
+     *
+     * @param string $tmpfilepath     Ruta a l'arxiu de temporal
+     * @param string $tmplocalitemid  Id de l'ítem de l'arxiu temporal
      */
-    function __construct() {
+    function __construct($tmpfilepath, $tmplocalitemid) {
 
         global $CFG, $COURSE;
 
         // Get and Check block config
         $this->_config = get_config('blocks/myvideos');
-        $vars = array('server', 'username', 'password', 'path', 'moodlepath');
+        $vars = array('server', 'username', 'password', 'path');
         foreach ($vars as $var) {
 
             if (!isset($this->_config->$var)) {
@@ -51,8 +55,9 @@ class ffmpeg_class {
 
         // Clean slash
         $this->_config->path = rtrim($this->_config->path, '/');
-        $this->_config->moodlepath = rtrim($this->_config->moodlepath, '/');
 
+        $this->_tmplocalpath = $tmpfilepath;
+        $this->_tmplocalitemid = $tmplocalitemid;
 
         // Search for ssh2
         if ($this->_config->server != 'localhost') {
@@ -85,7 +90,6 @@ class ffmpeg_class {
         $this->_sftp = null;
     }
 
-
     /**
      * Check if the video will be encoded
      */
@@ -93,19 +97,15 @@ class ffmpeg_class {
 
         global $CFG, $USER, $COURSE;
 
-        if ($_FILES['uploadfile']['error'] != 0) {
-            print_error('errorffmpegfile', 'block_myvideos');
-        }
-
         $this->_tmpfile = $this->_config->path.'/'.$USER->id.'_'.rand(10, 99);
 
         // Send video to encode
         if ($this->_config->server != 'localhost') {
-            if (!@ssh2_scp_send($this->_cnx, $_FILES['uploadfile']['tmp_name'], $this->_tmpfile, $this->_defaultpermissions)) {
+            if (!@ssh2_scp_send($this->_cnx, $this->_tmplocalpath, $this->_tmpfile, $this->_defaultpermissions)) {
                 print_error('errorffmpegsending', 'block_myvideos');
             }
         } else {
-            if (!copy($_FILES['uploadfile']['tmp_name'], $this->_tmpfile)) {
+            if (!copy($this->_tmplocalpath, $this->_tmpfile)) {
                 print_error('errorcheckpermissions', 'block_myvideos');
             }
             if (!chmod($this->_tmpfile, $this->_defaultpermissions)) {
@@ -139,17 +139,12 @@ class ffmpeg_class {
 
     }
 
-
     /**
      * Encodes the file with ffmpeg, if fails, it tries to pass through mencoder first
      */
     function encode_video() {
 
-        global $CFG, $USER, $COURSE;
-
-        if (!$_FILES['uploadfile']['tmp_name']) {
-            return false;
-        }
+        global $CFG, $COURSE;
 
         // Quality
         $bitratestring = ' -b '.$this->_quality[$this->_qualitysubmitted];
@@ -163,7 +158,6 @@ class ffmpeg_class {
 
                 // Only for flash video files
                 if (strstr(strtolower($videofiletype), 'flash video') != false) {
-
                     $movecommand = 'mv '.$this->_tmpfile.' '.$this->_convertedfile;
                     $this->execute_command($movecommand);
                     return true;
@@ -172,17 +166,17 @@ class ffmpeg_class {
         }
 
         // Encode video using ffmpeg
-        $command = $this->_config->ffmpeg.' -i '.$this->_tmpfile.' -ar 44100 '.$bitratestring.' '.$this->_convertedfile;
+        $command = 'ffmpeg -i '.$this->_tmpfile.' -ar 44100 '.$bitratestring.' '.$this->_convertedfile;
         $feedback = $this->execute_command($command);
 
         // If it can't be encoded we try to encode with mencoder
-        if (!preg_match('/Press .* to stop encoding/i', $feedback)) {
+        if (!strstr($feedback, 'Press [q] to stop encoding')) {
 
             // Delete crashed file
             $rmcommand = 'rm '.$this->_convertedfile;
             $this->execute_command($rmcommand);
 
-            $mencodercommand = $this->_config->mencoder.' '.$this->_tmpfile.' -ovc lavc -oac mp3lame -o '.$this->_convertedfile.'.flv';
+            $mencodercommand = 'mencoder '.$this->_tmpfile.' -ovc lavc -oac mp3lame -o '.$this->_convertedfile.'.flv';
             $feedback = $this->execute_command($mencodercommand);
 
             if (!strstr($feedback, 'Writing index...')) {
@@ -193,9 +187,9 @@ class ffmpeg_class {
             }
 
             // To ffmpeg again
-            $command = $this->_config->ffmpeg.' -i '.$this->_convertedfile.'.flv -ar 44100 '.$bitratestring.' '.$this->_convertedfile;
+            $command = 'ffmpeg -i '.$this->_convertedfile.'.flv -ar 44100 '.$bitratestring.' '.$this->_convertedfile;
             $feedback = $this->execute_command($command);
-            if (!preg_match('/Press .* to stop encoding/i', $feedback)) {
+            if (!strstr($feedback, 'Press [q] to stop encoding')) {
 
                 // If we can't convert the file redirection to index
                 $this->delete_files();
@@ -215,10 +209,10 @@ class ffmpeg_class {
 
         global $CFG, $COURSE;
 
-        $thumbcommand = $this->_config->ffmpeg." -i ".$this->_convertedfile." -ss 00:00:01 -vframes 1 ".$this->_tmpfile.".%d.jpg";
+        $thumbcommand = "ffmpeg -i ".$this->_convertedfile." -ss 00:00:01 -vframes 1 ".$this->_tmpfile.".%d.jpg";
         $feedback = $this->execute_command($thumbcommand);
 
-        if (!preg_match('/Press .* to stop encoding/i', $feedback)) {
+        if (!strstr($feedback, 'Press [q] to stop encoding')) {
 
             $this->delete_files();
             redirect($CFG->wwwroot.'/blocks/myvideos/index.php?courseid='.$COURSE->id.'&amp;action=uploadvideo', get_string('thumberror', 'block_myvideos'), 5);
@@ -252,7 +246,7 @@ class ffmpeg_class {
 
     function get_video_info() {
 
-        $infocommand = $this->_config->ffmpeg.' -i '.$this->_convertedfile;
+        $infocommand = 'ffmpeg  -i '.$this->_convertedfile;
         $feedback = $this->execute_command($infocommand);
 
         // Info
@@ -281,62 +275,52 @@ class ffmpeg_class {
         return $videoinfo;
     }
 
+    /**
+     * Stores the files into the filesystem
+     * @param integer  $itemid  Temporal ID (will be overwrite by uploadvideo->process_data()
+     * @param string   $videopath
+     * @param string   $thumbpath
+     */
+    function get_files($itemid, $videofilename, $thumbfilename) {
 
-    function get_files($videopath, $thumbpath) {
+        $fs = get_file_storage();
 
-        global $USER;
-
-        $videoexp = explode('/', $this->_convertedfile);
-        $thumbexp = explode('/', $this->_thumb);
-        $videofilename = $videoexp[count($videoexp)-1];
-        $thumbfilename = $thumbexp[count($thumbexp)-1];
-
-        $mainpath = rtrim($this->_config->moodlepath, '/');
-
-        if (!file_exists($mainpath.'/'.$USER->id)) {
-
-
-            if (!file_exists($mainpath)) {
-
-                // Creating main path
-                if (!@mkdir($mainpath, $this->_defaultpermissions, true)) {
-                    print_error('errorcheckpermissions', 'block_myvideos');
-                }
-            }
-
-            // Check moodlepath permissions
-            if (!is_writable($mainpath)) {
-
-                $this->delete_files();
-                print_error('errorcheckpermissions', 'block_myvideos');
-            }
-
-            if (!@mkdir(rtrim($this->_config->moodlepath, '/').'/'.$USER->id.'/videos/', $this->_defaultpermissions, true) ||
-                !@mkdir(rtrim($this->_config->moodlepath, '/').'/'.$USER->id.'/thumbs/', $this->_defaultpermissions, true)) {
-
-                    print_error('errorcheckpermissions', 'block_myvideos');
-            }
-        }
-
+        // Remote FFmpeg server
         if ($this->_config->server != 'localhost') {
+
+            $videopath = sys_get_temp_dir() . '/' . $videofilename;
+            $thumbpath = sys_get_temp_dir() . '/' . $thumbfilename;
+
+            // Copy files to $videopath and $thumbpath
             if (!$this->get_remote_file($this->_convertedfile, $videopath) ||
                 !$this->get_remote_file($this->_thumb, $thumbpath)) {
 
                 $this->delete_files();
                 print_error('errorffmpegrecieving', 'block_myvideos');
             }
+
+        // Local FFmpeg server
         } else {
-
-            if (!copy($this->_convertedfile, $videopath) ||
-                !copy($this->_thumb, $thumbpath)) {
-
-                $this->delete_files();
-                print_error('errorffmpegfile', 'block_myvideos');
-            }
+            $videopath = $this->_convertedfile;
+            $thumbpath = $this->_thumb;
         }
 
-        chmod($videopath, $this->_defaultpermissions);
-        chmod($thumbpath, $this->_defaultpermissions);
+        // Creating resource inside moodle filesystem
+        $commonfiledata = array('contextid' => context_system::instance()->id, 'component' => 'block_myvideos',
+            'itemid' => $itemid, 'filepath' => '/', 'timecreated' => time(),
+            'timemodified' => time());
+
+        // Video
+        $videofiledata = $commonfiledata;
+        $videofiledata['filename'] = $videofilename;
+        $videofiledata['filearea'] = 'video';
+        $fs->create_file_from_pathname($videofiledata, $videopath);
+
+        // Thumb
+        $thumbfiledata = $commonfiledata;
+        $thumbfiledata['filename'] = $thumbfilename;
+        $thumbfiledata['filearea'] = 'thumb';
+        $fs->create_file_from_pathname($thumbfiledata, $thumbpath);
 
         $this->delete_files();
     }
@@ -383,7 +367,9 @@ class ffmpeg_class {
 
                 if (!$read) break;
 
-                $ready = stream_select($read, $write=NULL, $ex= NULL, 2);
+                $write = null;
+                $ex = null;
+                $ready = stream_select($read, $write, $ex, 2);
 
                 if ($ready === false) {
                     break; #should never happen - something died
@@ -406,8 +392,16 @@ class ffmpeg_class {
 
 
     function delete_files() {
+        global $USER;
+
+        // Removing .flv from the ffmpeg server
         $rmcommand = 'rm '.$this->_tmpfile.' '.$this->_convertedfile.' '.$this->_thumb.' '.$this->_convertedfile.'.flv';
         $this->execute_command($rmcommand);
+
+        // Removing moodle
+        $fs = get_file_storage();
+        $usercontext = context_user::instance($USER->id);
+        $fs->delete_area_files($usercontext->id, 'user', 'draft', $this->_tmplocalitemid);
     }
 
     /**
@@ -482,5 +476,3 @@ class ffmpeg_class {
     }
 
 }
-
-?>
