@@ -9,9 +9,6 @@ if ($currenttab == 'video') {
 }
 
 $tabsarray[] = 'videos';
-if (has_capability('block/myvideos:uploadvideo', $context)) {
-    $tabsarray[] = 'uploadvideo';
-}
 $tabsarray[] = 'searchvideos';
 
 
