@@ -104,7 +104,7 @@ class myvideos_actionable {
         $sql = "SELECT k.id, k.keyword
                 FROM {myvideos_video_tag} t
                 JOIN {myvideos_video_keyword} k ON k.id = t.keywordid
-                WHERE t.videoid = '$videoid' ORDER BY t.id";
+                WHERE t.videoid = '$videoid'";
 
         if (!$keywords = $DB->get_records_sql($sql)) {
             return '';

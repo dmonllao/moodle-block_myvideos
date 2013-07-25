@@ -33,15 +33,13 @@ class myvideos_videos_class extends myvideos_actionable {
         $uservideossql = "SELECT DISTINCT mv.id, mv.title, mv.userid, mv.author,
                           mv.video, mv.link, 0 as favorite, mv.views, mv.width, mv.height
                           FROM {$CFG->prefix}myvideos_video mv
-                          WHERE mv.userid = '$USER->id' AND mv.timedeleted = '0'
-                          ORDER BY mv.timecreated DESC";
+                          WHERE mv.userid = '$USER->id' AND mv.timedeleted = '0'";
 
         $userfavoritessql = "SELECT DISTINCT mv.id, mv.title, mv.userid, mv.author,
                              mv.video, mv.link, 1 as favorite, mv.views, mv.width, mv.height
                              FROM {$CFG->prefix}myvideos_video mv
                              JOIN {$CFG->prefix}myvideos_video_favorite mvf ON mv.id = mvf.videoid
-                             WHERE mvf.userid = '$USER->id'
-                             ORDER BY mv.timecreated DESC";
+                             WHERE mvf.userid = '$USER->id'";
 
         $this->_uservideos = $DB->get_records_sql($uservideossql);
         $this->_userfavorites = $DB->get_records_sql($userfavoritessql);
