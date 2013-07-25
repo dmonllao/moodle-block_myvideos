@@ -1,0 +1,1 @@
+# The ability to add the block to a course is managed by myvideos:addinstance
