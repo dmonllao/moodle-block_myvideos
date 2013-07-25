@@ -52,6 +52,7 @@ class myvideos_uploadvideo_class extends myvideos_actionable {
             // Long videos encoding could pass over the database timeout
             $this->db_reconnect();
 
+            $video = new stdClass();
             $video->userid = $USER->id;
             $video->link = '0';
             $video->publiclevel = $data->publiclevel;
@@ -88,25 +89,20 @@ class myvideos_uploadvideo_class extends myvideos_actionable {
             redirect($redirecturl, get_string("changessaved"));
         }
     }
-    
+
     /**
      * For installations with low wait DB connection timeout
      */
     function db_reconnect() {
-        global $CFG, $db;
-        
-        $db->Disconnect();
-        
-        if (!isset($CFG->dbpersist) or !empty($CFG->dbpersist)) {    // Use persistent connection (default)
-            $dbconnected = $db->PConnect($CFG->dbhost,$CFG->dbuser,$CFG->dbpass,$CFG->dbname);
-        } else {                                                     // Use single connection
-            $dbconnected = $db->Connect($CFG->dbhost,$CFG->dbuser,$CFG->dbpass,$CFG->dbname);
-        }
-        
-        if (!$dbconnected) {
+        global $CFG, $DB;
+
+        $DB->dispose();
+        $connected = $DB->connect($CFG->dbhost, $CFG->dbuser, $CFG->dbpass, $CFG->dbname, $CFG->prefix, $CFG->dboptions);
+
+        if (!$connected) {
             print_error('errorinserting', 'block_myvideos');
         }
-        configure_dbconnection();
+
     }
-    
+
 }

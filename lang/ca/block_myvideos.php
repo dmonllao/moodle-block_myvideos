@@ -39,6 +39,7 @@ $string['getembedcode'] = '&lt;Embed&gt;';
 $string['keywords'] = 'Paraules clau';
 $string['keywords_help'] = 'Etiquetes del video, facilita les cerques';
 $string['loading'] = 'Carregant';
+$string['myvideos:addinstance'] = 'Afegir un bloc dels Meus videos';
 $string['myvideos:favoritevideo'] = 'Afegir a favorits';
 $string['myvideos:manage'] = 'Utilitzar el bloc';
 $string['myvideos:publicvideo'] = 'Fer accessibles els videos des de fora de Moodle';

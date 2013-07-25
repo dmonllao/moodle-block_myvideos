@@ -39,6 +39,7 @@ $string['getembedcode'] = '&lt;Embed&gt;';
 $string['keywords'] = 'Keywords';
 $string['keywords_help'] = 'The video tags';
 $string['loading'] = 'Loading';
+$string['myvideos:addinstance'] = 'Add a myvideos block instance';
 $string['myvideos:favoritevideo'] = 'Add to favorites';
 $string['myvideos:manage'] = 'Use the block';
 $string['myvideos:publicvideo'] = 'Make a video accessible from outside Moodle';

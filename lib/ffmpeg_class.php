@@ -212,11 +212,11 @@ class ffmpeg_class {
         $thumbcommand = "ffmpeg -i ".$this->_convertedfile." -ss 00:00:01 -vframes 1 ".$this->_tmpfile.".%d.jpg";
         $feedback = $this->execute_command($thumbcommand);
 
-        if (!strstr($feedback, 'Press [q] to stop encoding')) {
+        //if (!strstr($feedback, 'Press [q] to stop encoding')) {
 
-            $this->delete_files();
-            redirect($CFG->wwwroot.'/blocks/myvideos/index.php?courseid='.$COURSE->id.'&amp;action=uploadvideo', get_string('thumberror', 'block_myvideos'), 5);
-        }
+            //$this->delete_files();
+            //redirect($CFG->wwwroot.'/blocks/myvideos/index.php?courseid='.$COURSE->id.'&amp;action=uploadvideo', get_string('thumberror', 'block_myvideos'), 5);
+        //}
 
         $this->_thumb = $this->_tmpfile.'.1.jpg';
     }
@@ -268,6 +268,7 @@ class ffmpeg_class {
 
             // Video size
             $size = explode('x', $videodata[2]);
+            $videoinfo = new stdClass();
             $videoinfo->width = $size[0];
             $videoinfo->height = $size[1];
         }
@@ -329,14 +330,23 @@ class ffmpeg_class {
     function execute_command($command) {
 
         $data = '';
-
+debugging($command);
         if ($this->_config->server != 'localhost') {
+
             $stream = @ssh2_exec($this->_cnx, $command, false);
+            $errorstream = ssh2_fetch_stream($stream, SSH2_STREAM_STDERR);
+
             stream_set_blocking($stream, true);
+            stream_set_blocking($errorstream, true);
 
             while ( $buf = fread($stream, 4096)) {
                 $data .= $buf;
             }
+
+            // Get the error stream contents.
+            $error = stream_get_contents($errorstream);
+
+            fclose($errorstream);
             fclose($stream);
 
         // http://lists.mplayerhq.hu/pipermail/ffmpeg-user/2006-October/004773.html
@@ -381,12 +391,15 @@ class ffmpeg_class {
                 }
             }
 
+            // Get the error stream contents.
+            $error = stream_get_contents($pipes[2]);
+
             fclose($pipes[1]);
             fclose($pipes[2]);
 
             proc_close($process);
         }
-
+debugging('error code: ' . $error);
         return $data;
     }
 

@@ -213,6 +213,7 @@ function myvideos_add_view($videodata) {
     global $DB;
 
     // Just to avoid possible reference problems...
+    $tmpobj = new stdClass();
     $tmpobj->id = $videodata->id;
     $tmpobj->views = intval($videodata->views) + 1;
 

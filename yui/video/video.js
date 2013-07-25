@@ -12,18 +12,18 @@ YUI.add('moodle-block_myvideos-video', function(Y) {
          * Assigns the async call to the submit button element
          * @return boolean False on onclick to prevent the form of being sent
          */
-        initializer : function (Y) {
-
-            M.block_myvideos.Y = Y;
+        initializer : function (params) {
 
             var element = Y.one('#id_submitbutton');
-            element.on("click", function(e) {
+            if (element) {
+                element.on("click", function(e) {
 
-                if (validate_myvideos_video_form()) {
-                    this.add_comment(M.block_myvideos.Y);
-                }
-                e.preventDefault();
-            });
+                    if (validate_myvideos_video_form()) {
+                        this.add_comment();
+                    }
+                    e.preventDefault();
+                });
+            }
         },
 
         /**
@@ -31,7 +31,7 @@ YUI.add('moodle-block_myvideos-video', function(Y) {
          *
          * @return void
          */
-        add_comment : function (Y) {
+        add_comment : function () {
 
             // Unique elements
             // TODO: Y.one

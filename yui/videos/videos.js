@@ -12,7 +12,7 @@ YUI.add('moodle-block_myvideos-videos', function(Y) {
          * Assigns the async call to the video element to load the selected video into the main div
          * @return boolean False on onclick to prevent the form of being sent
          */
-        initializer : function (Y, courseid, selected, favorite) {
+        initializer : function (params) {
 
             var element = Y.one('#id_video_preview_' + this.get('selected'));
 
